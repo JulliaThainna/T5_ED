@@ -124,7 +124,7 @@ PRE: Variável Grafo
 POS: Não há retorno
 */
 void desalocaGrafo(Graph graph){
-    removeList(graph, 1);
+    removeList(graph, 0);
 }
 
 /*
