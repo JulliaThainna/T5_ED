@@ -1,0 +1,10 @@
+*.o
+*.svg
+*.txt
+*.geo
+*.qry
+*.via
+*.ec
+*.pm
+.vscode
+siguel

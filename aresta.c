@@ -1,5 +1,6 @@
 #include <stdio.h>
 #include <stdlib.h>
+#include <string.h>      
 
 #include "aresta.h"
 #include "graph.h"
@@ -15,8 +16,10 @@ typedef struct{
     float vm;
 }ArestaStruct;
 
-Aresta createAresta(char* nome, char* ldir, char* lesq, float cmp, float vm){
+Aresta createAresta(char* nome, char* nomeVerticeInicial, char* nomeVerticeFinal, char* ldir, char* lesq, float cmp, float vm){
     ArestaStruct* art = (ArestaStruct*) malloc(sizeof(ArestaStruct));
+    strcpy(art->nomeVerticeInicial, nomeVerticeInicial);
+    strcpy(art->nomeVerticeFinal, nomeVerticeFinal);
     strcpy(art->nome, nome);
     strcpy(art->ldir, ldir);
     strcpy(art->lesq, lesq);

@@ -7,12 +7,14 @@ typedef void* Vertice;
 
 Vertice createVertice(char* id, float x, float y);
 
-char* verticeGetId(Vertice vertice);
+char* verticeGetNome(Vertice vertice);
 
 Point verticeGetPoint(Vertice vertice);
 
 float verticeGetX(Vertice vertice);
 
 float verticeGetY(Vertice vertice);
+
+void desenhaVerticeSvg(Vertice vertice, FILE *fileSvg);
 
 #endif

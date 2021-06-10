@@ -1,5 +1,6 @@
 #include <stdio.h>
 #include <stdlib.h>
+#include <string.h>
 
 #include "vertice.h"
 #include "point.h"
@@ -13,7 +14,7 @@ typedef struct{
 Vertice createVertice(char* nome, float x, float y){
     VerticeStruct* vert = (VerticeStruct*)malloc(sizeof(VerticeStruct));
     strcpy(vert->nome, nome);
-    vert->point = createPoint(x, y);
+    vert->point = criaPoint(x, y);
     return vert;
 }
 
@@ -35,4 +36,9 @@ float verticeGetX(Vertice vertice){
 float verticeGetY(Vertice vertice){
     VerticeStruct* vert = (VerticeStruct*)vertice;
     return getPointY(vert->point);
+}
+
+void desenhaVerticeSvg(Vertice vertice, FILE *fileSvg){
+    fprintf(fileSvg, "<circle cx=\"%f\" cy=\"%f\" r=\"10\" stroke=\"black\" fill=\"white\" stroke-width=\"0.5\" />", verticeGetX(vertice), verticeGetY(vertice));
+    fprintf(fileSvg, "<text x=\"%f\" y=\"%f\" text-anchor=\"middle\" font-size=\"0.5em\">%s</text>", verticeGetX(vertice), verticeGetY(vertice), verticeGetNome(vertice));
 }

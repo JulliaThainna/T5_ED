@@ -16,5 +16,7 @@ void adicionaVertice(Graph graph, Vertice vertice);
 void adicionaAresta(Graph graph, Aresta aresta);
 void desalocaAdjascentList(AdjascentList adjascentList);
 void desalocaGrafo(Graph graph);
+void desenhaArestaSvg(Graph graph, AdjascentList adjascentList, Aresta aresta, FILE *fileSvg);
+void desenhaGrafoSvg(Graph graph, FILE *fileSvg);
 
 #endif 

@@ -7,10 +7,6 @@
 #include "aresta.h"
 #include "vertice.h"
 
-/*
-isso daqui é um teste de pull e push
-*/
-
 /*Struct da lista de "vértices". Ex: 1 -> 2 -> 3*/
 /*
 Essa struct representa cada vertice que é adicionado no grafo.
@@ -111,9 +107,8 @@ POS: Não há retorno
 */
 void adicionaAresta(Graph graph, Aresta aresta)
 {
-    AdjascentListStruct *als = graphGetAdjascentList(graph, arestaGetVerticeInicial(aresta));
-    if (als == NULL)
-    {
+    AdjascentListStruct* als = graphGetAdjascentList(graph, arestaGetNomeVerticeInicial(aresta));
+    if (als == NULL){
         return;
     }
     insert(als->arestas, aresta);
@@ -150,6 +145,8 @@ POS: Não há retorno
 */
 void desenhaArestaSvg(Graph graph, AdjascentList adjascentList, Aresta aresta, FILE *fileSvg)
 {
+    //Pra desenhar uma aresta eu preciso de duas listas adjascentes
+    //Porque? Porque dentro das listas adjascentes tem a posição (point) dos vertice
     AdjascentListStruct *alsVI = (AdjascentListStruct *)adjascentList;
     AdjascentListStruct *alsVF = (AdjascentListStruct *)graphGetAdjascentList(graph, arestaGetNomeVerticeFinal(aresta));
 
@@ -159,4 +156,26 @@ void desenhaArestaSvg(Graph graph, AdjascentList adjascentList, Aresta aresta, F
     float y2 = verticeGetY(alsVF->inicio);
 
     fprintf(fileSvg, "<line x1=\"%lf\" y1=\"%lf\" x2=\"%lf\" y2=\"%lf\" style=\"stroke:red;stroke-width:2\"/>\n", x1, y1, x2, y2);
+}
+
+void desenhaGrafoSvg(Graph graph, FILE *fileSvg){
+    //Desenha todas as arestas
+    for(Node aux = getFirst(graph); aux != NULL; aux = getNext(aux)){
+        AdjascentList al = getInfo(aux);
+        //Info é AdjascentList
+        DoublyLinkedList arestas = graphGetArestas(al);
+        //Percorre a lista de arestas imprimindo cada aresta
+        for(Node auxArestas = getFirst(arestas); auxArestas != NULL; auxArestas = getNext(auxArestas)){
+            Aresta aresta = getInfo(auxArestas);
+            desenhaArestaSvg(graph, al, aresta, fileSvg);
+        }
+    }
+
+    //Desenha todos os vertices
+    for(Node aux = getFirst(graph); aux != NULL; aux = getNext(aux)){
+        AdjascentList al = getInfo(aux);
+        //Info é AdjascentList
+        Vertice vert = graphGetVertice(al);
+        desenhaVerticeSvg(vert, fileSvg);
+    }
 }
