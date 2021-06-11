@@ -3,6 +3,7 @@
 #include <string.h>
 
 #include "graph.h"
+#include "hashTable.h"
 #include "doublyLinkedList.h"
 #include "aresta.h"
 #include "vertice.h"
@@ -107,8 +108,9 @@ POS: Não há retorno
 */
 void adicionaAresta(Graph graph, Aresta aresta)
 {
-    AdjascentListStruct* als = graphGetAdjascentList(graph, arestaGetNomeVerticeInicial(aresta));
-    if (als == NULL){
+    AdjascentListStruct *als = graphGetAdjascentList(graph, arestaGetNomeVerticeInicial(aresta));
+    if (als == NULL)
+    {
         return;
     }
     insert(als->arestas, aresta);
@@ -158,24 +160,100 @@ void desenhaArestaSvg(Graph graph, AdjascentList adjascentList, Aresta aresta, F
     fprintf(fileSvg, "<line x1=\"%lf\" y1=\"%lf\" x2=\"%lf\" y2=\"%lf\" style=\"stroke:red;stroke-width:2\"/>\n", x1, y1, x2, y2);
 }
 
-void desenhaGrafoSvg(Graph graph, FILE *fileSvg){
+void desenhaGrafoSvg(Graph graph, FILE *fileSvg)
+{
     //Desenha todas as arestas
-    for(Node aux = getFirst(graph); aux != NULL; aux = getNext(aux)){
+    for (Node aux = getFirst(graph); aux != NULL; aux = getNext(aux))
+    {
         AdjascentList al = getInfo(aux);
         //Info é AdjascentList
         DoublyLinkedList arestas = graphGetArestas(al);
         //Percorre a lista de arestas imprimindo cada aresta
-        for(Node auxArestas = getFirst(arestas); auxArestas != NULL; auxArestas = getNext(auxArestas)){
+        for (Node auxArestas = getFirst(arestas); auxArestas != NULL; auxArestas = getNext(auxArestas))
+        {
             Aresta aresta = getInfo(auxArestas);
             desenhaArestaSvg(graph, al, aresta, fileSvg);
         }
     }
 
     //Desenha todos os vertices
-    for(Node aux = getFirst(graph); aux != NULL; aux = getNext(aux)){
+    for (Node aux = getFirst(graph); aux != NULL; aux = getNext(aux))
+    {
         AdjascentList al = getInfo(aux);
         //Info é AdjascentList
         Vertice vert = graphGetVertice(al);
         desenhaVerticeSvg(vert, fileSvg);
     }
+}
+
+Graph primAlgorithm(Graph graph)
+{
+    HashTable htVisitados = createHashTable(100);
+    Graph agm = createGraph();
+
+    char *nomeVI, *nomeVF;
+    char visitado[] = "1";
+
+    //Cria uma cópia dos vertices para a arvore geradora minima
+    for (Node aux = getFirst(graph); aux != NULL; aux = getNext(aux))
+    {
+        AdjascentList adl = getInfo(aux);
+        Vertice v = graphGetVertice(adl);
+        Vertice v2 = createVertice(verticeGetNome(v), verticeGetX(v), verticeGetY(v));
+        adicionaVertice(agm, v2);
+    }
+
+    //Adiciona o primeiro node na HT de visitados
+    Vertice vertice = graphGetVertice(getInfo(getFirst(graph)));
+    insertValueHashTable(htVisitados, verticeGetNome(vertice), visitado);
+
+    while (1)
+    {
+        float menorCmp;
+        Aresta aresta;
+        int first = 1;
+
+        for (Node i = getFirst(graph); i != NULL; i = getNext(i))
+        {
+            // TODO: Perguntar pro pedro se há necessidade de pegar novamente o primeiro vertice
+            AdjascentListStruct *adl = getInfo(i);
+            vertice = adl->inicio;
+            if (isKeyHashTable(htVisitados, verticeGetNome(vertice)) != 0)
+            {
+                for (Node j = getFirst(adl->arestas); j != NULL; j = getNext(j))
+                {
+                    if (isKeyHashTable(htVisitados, arestaGetNomeVerticeFinal(getInfo(j))) == 0)
+                    {
+                        if (first != 0)
+                        {
+                            nomeVI = verticeGetNome(vertice);
+                            aresta = getInfo(j);
+                            nomeVF = arestaGetNomeVerticeFinal(aresta);
+                            menorCmp = arestaGetCmp(aresta);
+                            first = 0;
+                        }
+                        else if (arestaGetCmp(getInfo(j)) > menorCmp)
+                        {
+                            nomeVI = verticeGetNome(vertice);
+                            aresta = getInfo(j);
+                            nomeVF = arestaGetNomeVerticeFinal(aresta);
+                            menorCmp = arestaGetCmp(aresta);
+                        }
+                    }
+                }
+            }
+        }
+        if (first != 0)
+        {
+            break;
+        }
+        Aresta a1 = createAresta(arestaGetNome(aresta), nomeVI, nomeVF, arestaGetLdir(aresta), arestaGetLesq(aresta), arestaGetCmp(aresta), arestaGetVm(aresta));
+        Aresta a2 = createAresta(arestaGetNome(aresta), nomeVF, nomeVI, arestaGetLdir(aresta), arestaGetLesq(aresta), arestaGetCmp(aresta), arestaGetVm(aresta));
+        adicionaAresta(agm, a1);
+        adicionaAresta(agm, a2);
+        insertValueHashTable(htVisitados, nomeVF, visitado);
+    }
+    // TODO: Arrumar algum jeito para não dar double free ou free em coisa invalida quando chamar removeHashTable
+    removeHashTable(htVisitados);
+    return agm;
 }

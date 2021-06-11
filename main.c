@@ -7,7 +7,8 @@
 #include "vertice.h"
 #include "aresta.h"
 
-int main(){
+int main()
+{
     Graph g = createGraph();
     Vertice v1 = createVertice("juia", 50, 50);
     adicionaVertice(g, v1);
@@ -16,11 +17,14 @@ int main(){
 
     Aresta a1 = createAresta("Rua JuiaRafo", "rafo", "juia", "batata", "batata2", 30, 5);
     adicionaAresta(g, a1);
-    
-    FILE* svg = fopen("teste.svg", "w");
+
+    FILE *svg = fopen("teste.svg", "w");
     fprintf(svg, "<svg viewBox=\"0 0 3000 3000\" xmlns=\"http://www.w3.org/2000/svg\">");
     desenhaGrafoSvg(g, svg);
     fprintf(svg, "</svg>");
     fclose(svg);
+
+    Graph agm = primAlgorithm(g);
+
     return 0;
 }
