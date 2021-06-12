@@ -157,7 +157,7 @@ void desenhaArestaSvg(Graph graph, AdjascentList adjascentList, Aresta aresta, F
     float x2 = verticeGetX(alsVF->inicio);
     float y2 = verticeGetY(alsVF->inicio);
 
-    fprintf(fileSvg, "<line x1=\"%lf\" y1=\"%lf\" x2=\"%lf\" y2=\"%lf\" style=\"stroke:red;stroke-width:2\"/>\n", x1, y1, x2, y2);
+    fprintf(fileSvg, "\n\t<line x1=\"%lf\" y1=\"%lf\" x2=\"%lf\" y2=\"%lf\" style=\"stroke:red;stroke-width:2\"/>\n", x1, y1, x2, y2);
 }
 
 void desenhaGrafoSvg(Graph graph, FILE *fileSvg)
