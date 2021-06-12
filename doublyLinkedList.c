@@ -65,7 +65,7 @@ Info getInfoByIndex(DoublyLinkedList lista, int i){
     if(node == NULL){
         return NULL;
     }
-    while (j < i) {
+    while(j < i) {
         node = getNext(node);
         j++;
         if(node == NULL){

@@ -30,6 +30,8 @@ int main()
     return 0;
 }
 */
+// TODO: Chamar função do .via e definir os grafos/ estruturas que ele precisa
+// TODO: Fazer qry5.c e .h
 
 //Standart Headers
 #include <stdio.h>
@@ -71,67 +73,64 @@ enum LISTAS
 int main(int argc, char *argv[])
 {
     //Variáveis passadas como parametro para o Path
-    char *dirEntrada = NULL;
-    char *arqGeo = NULL;
-    char *arqQry = NULL;
-    char *dirSaida = NULL;
-    char *arqPm = NULL;
-    char *arqEc = NULL;
+    char* dirEntrada = NULL;
+    char* arqGeo = NULL;
+    char* arqQry = NULL;
+    char* dirSaida = NULL;
+    char* arqPm = NULL;
+    char* arqEc = NULL;
+    char* arqVia = NULL;
 
     //Variaveis criadas para a localização dos arquivos de entrada e de saída
     //Armazena dirEntrada + arqGeo
-    char *dirGeo = NULL;
+    char* dirGeo = NULL;
     //Armazena o nome do arquivo .geo
-    char *nomeArquivoGeo = NULL;
+    char* nomeArquivoGeo = NULL;
     //Armazena o path de saida do arquivo .svg + nome do arquivo + extensão
-    char *saidaSvgGeo = NULL;
+    char* saidaSvgGeo = NULL;
     //Armazena o path de entrada do arquivo qry
-    char *dirQry = NULL;
+    char* dirQry = NULL;
     //Armazena o nome do arquivo .geo sem extensão
-    char *nomeGeoSemExtensao = NULL;
+    char* nomeGeoSemExtensao = NULL;
     //Armazena o nome do arquivo .qry sem extensão
-    char *nomeQrySemExtensao = NULL;
+    char* nomeQrySemExtensao = NULL;
     //Armazena o nome do arquivo geo com o arquivo qry
-    char *nomeGeoQry = NULL;
+    char* nomeGeoQry = NULL;
     //Armazena o caminho de saida do SVG do geo+qry
-    char *dirSaidaGeoQry = NULL;
+    char* dirSaidaGeoQry = NULL;
     //Armazena o nome do arquivo de Log (TXT)
-    char *nomeArquivoLogTxt = NULL;
+    char* nomeArquivoLogTxt = NULL;
     //Armazena o path de saida do arquivo de Log
-    char *dirTxt = NULL;
+    char* dirTxt = NULL;
     //Diretorio dirEntrada + arqEc
-    char *dirEc = NULL;
+    char* dirEc = NULL;
     //Diretorio dirEntrada + arqEc
-    char *dirPm = NULL;
+    char* dirPm = NULL;
 
     CorPadrao cores = criaCorPadrao("0.5", "coral", "saddlebrown", "0.5", "red", "darkred", "0.5", "deeppink", "mediumvioletred", "0.5", "green", "red", "0.5", "0.5");
 
     //Realiza a leitura dos parâmetros
-    for (int i = 1; argc > i; i++)
-    {
-        if (strcmp(argv[i], "-e") == 0)
-        {
+    for(int i = 1; argc > i; i++){
+        if(strcmp(argv[i], "-e") == 0){
             dirEntrada = buscaParametros(argv, i);
         }
-        else if (strcmp(argv[i], "-f") == 0)
-        {
+        else if(strcmp(argv[i], "-f") == 0){
             arqGeo = buscaParametros(argv, i);
         }
-        else if (strcmp(argv[i], "-q") == 0)
-        {
+        else if(strcmp(argv[i], "-q") == 0){
             arqQry = buscaParametros(argv, i);
         }
-        else if (strcmp(argv[i], "-o") == 0)
-        {
+        else if(strcmp(argv[i], "-o") == 0){
             dirSaida = buscaParametros(argv, i);
         }
-        else if (strcmp(argv[i], "-ec") == 0)
-        {
+        else if(strcmp(argv[i], "-ec") == 0){
             arqEc = buscaParametros(argv, i);
         }
-        else if (strcmp(argv[i], "-pm") == 0)
-        {
+        else if(strcmp(argv[i], "-pm") == 0){
             arqPm = buscaParametros(argv, i);
+        }
+        else if(strcmp(argv[i], "-v") == 0){
+            arqVia = buscaParametros(argv, i);
         }
         i++;
     }
@@ -141,14 +140,12 @@ int main(int argc, char *argv[])
 
     //Cria Listas
     DoublyLinkedList listas[10];
-    for (int i = CIRCULO; i <= QUADRA2; i++)
-    {
+    for(int i = CIRCULO; i <= QUADRA2; i++){
         listas[i] = create();
     }
     //Define HashTable
     HashTable hashTables[4];
-    for (int i = 0; i < 4; i++)
-    {
+    for(int i = 0; i < 4; i++){
         hashTables[i] = createHashTable(100);
     }
 
@@ -170,16 +167,13 @@ int main(int argc, char *argv[])
     //Cria o arquivo do SVG e DesenhaSvgGeo a lista dentro dele
     desenhaSvgGeo(quadTrees, saidaSvgGeo);
 
-    if (arqQry != NULL)
-    {
-        if (arqEc != NULL)
-        {
+    if(arqQry != NULL){
+        if(arqEc != NULL){
             //Lê os comandos do Ec
             concatenaCaminhos(dirEntrada, arqEc, &dirEc);
             readEc(quadTrees, hashTables, dirEc);
         }
-        if (arqPm != NULL)
-        {
+        if(arqPm != NULL){
             //Lê os comandos do Pm
             concatenaCaminhos(dirEntrada, arqPm, &dirPm);
             readPm(quadTrees, hashTables, dirPm);
@@ -205,12 +199,10 @@ int main(int argc, char *argv[])
         desenhaSvgQry(quadTrees, dirSaidaGeoQry);
     }
 
-    for (int i = 0; i < 8; i++)
-    {
+    for(int i = 0; i < 8; i++){
         removeList(listas[i], 0);
     }
-    for (int i = 0; i < 13; i++)
-    {
+    for(int i = 0; i < 13; i++){
         desalocaQt(quadTrees[i]);
     }
 

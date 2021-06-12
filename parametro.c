@@ -92,6 +92,20 @@ char* buscaParametros(char* argv[], int i){
             strcpy(parametro, argv[i]);
         }
         
+        else if(strcmp(argv[i], "-v") == 0){
+            i++;
+            if(argv[i] == NULL){
+                return NULL;
+            }
+            printf("\n\t\t> Arquivo .via: %s", argv[i]);
+            parametro = (char*) malloc((strlen(argv[i]) + 1) * sizeof(char));
+            if(parametro == NULL){
+                printf("\nErro inesperado! Memoria insuficiente para alocar o nome do diretorio de saida.");
+                exit(1);
+            }
+            strcpy(parametro, argv[i]);
+        }
+
         else{
             printf("\nComando siguel inexistente!");
             exit(1);           
