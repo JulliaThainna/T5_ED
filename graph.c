@@ -233,3 +233,84 @@ Graph primAlgorithm(Graph graph){
     removeHashTable(htVisitados);
     return agm;
 }
+
+Graph dijkstraAlgorithm(Graph graph, char* nomeVI, char* nomeVF, float* distTotal, float getPeso(Aresta aresta)){
+    DoublyLinkedList restantes = create();
+    HashTable distancia = createHashTable(100);
+    HashTable anterior = createHashTable(100);
+    float* aux = malloc(sizeof(float));
+    *aux = 0;
+
+    insertValueHashTable(distancia, nomeVI, aux);
+    for(Node node = getFirst(graph); node != NULL; node = getNext(node)){
+        insert(restantes, verticeGetNome(graphGetVertice(getInfo(node))));
+    }
+
+    while(1){
+        AdjascentList adl = graphGetAdjascentList(graph, nomeVI);
+        float* dAnt = (float*) getValue(distancia, nomeVI);
+        for(Node node = getFirst(graphGetArestas(adl)); node != NULL; node = getNext(node)){
+            Aresta aresta = getInfo(node);
+            char* idAux = arestaGetNomeVerticeFinal(aresta);
+            float* dist = getValue(distancia, idAux);
+            if(/*TODO: Colocar condição aqui*/1){
+                if(dist == NULL){
+                    float* distTemp = malloc(sizeof(float));
+                    *distTemp = getPeso(aresta) + *dAnt;
+                    insertValueHashTable(distancia, idAux, distTemp);
+                    char* tempId = malloc(sizeof(char) * (strlen(nomeVI) + 1));
+                    strcpy(tempId, nomeVI);
+                    insertValueHashTable(anterior, idAux, tempId);
+                }
+                else if(*dist > getPeso(aresta) + *dAnt){
+                    *dist = getPeso(aresta) + *dAnt;
+                    char* tempId = getValue(anterior, idAux);
+                    strcpy(tempId, nomeVI);
+                }
+            }
+        }
+        if(strcmp(nomeVI, nomeVF) == 0){
+            *distTotal = *(float*)getValue(distancia, nomeVF);
+            break;
+        }
+        float menor;
+        int flag = 1;
+        char idAnt[100];
+        strcpy(idAnt, nomeVI);
+        Node node = getFirst(restantes);
+        while(node != NULL){
+            if(strcmp(getInfo(node), idAnt) == 0){
+                Node visitado = node;
+                node = getNext(node);
+                removeNode(restantes, visitado, 0); // TODO: Checar na função a flag
+                continue;
+            }
+            float* valor = getValue(distancia, getInfo(node));
+            if(valor != NULL && (flag || menor > *valor)){
+                menor = *valor;
+                nomeVI = getInfo(node);
+                flag = 0;
+            }
+            node = getNext(node);
+        }
+        if(flag){
+            *distTotal = 0;
+            removeHashTable(distancia);
+            removeHashTable(anterior);
+            removeList(restantes, 0); // TODO: Checar na função a flag
+            return NULL;
+        }
+    }
+    DoublyLinkedList path = create();
+    while(nomeVF){
+        char* pathAux = malloc(sizeof(char) * (strlen(nomeVF) + 1));
+        strcpy(pathAux, nomeVF);
+        insert(path, pathAux);
+        nomeVF = getValue(anterior, nomeVF);
+    }
+    removeHashTable(distancia);
+    removeHashTable(anterior);
+    removeList(restantes, 0);
+
+    return path;
+}
