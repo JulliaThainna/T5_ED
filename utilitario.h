@@ -50,8 +50,25 @@ float minV(float v[], int tamanho);
 //Calcula o max de um vetor;
 float maxV(float v[], int tamanho);
 
+/*
+Calcula a area de uma lista de pontos
+PRE: DoublyLinkedList l
+POS: float area
+*/
 float calculaArea(DoublyLinkedList l);
 
+/*
+Calcula o centroide de uma lista de pontos e da área
+PRE: DoublyLinkedList l e float area
+POS: Point centroide
+*/
 Point centroide(DoublyLinkedList l, float area);
+
+/*
+Retorna 1 se existe a string char* info dentro de uma lista de strings e 0 se não existe
+PRE: DoublyLinkedList list e char* info
+POS: 1 (true)/ 0 (false) 
+*/
+int stringInDoublyLinkedList(DoublyLinkedList list, char* info);
 
 #endif

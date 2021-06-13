@@ -1,5 +1,6 @@
 #include <stdio.h>
 #include <stdlib.h>
+#include <string.h>
 #include <math.h>
 
 #include "doublyLinkedList.h"
@@ -98,4 +99,13 @@ Point centroide(DoublyLinkedList l, float area){
     x += (getPointX(i) + getPointX(j)) * getPointX(i) * getPointY(j) - getPointY(i) * getPointX(j);
     y += (getPointY(i) + getPointY(j)) * getPointX(i) * getPointY(j) - getPointY(i) * getPointX(j);
     return criaPoint(x/(6 * area), y/(6 * area));
+}
+
+int stringInDoublyLinkedList(DoublyLinkedList list, char* info){
+    for(Node node = getFirst(list); node != NULL; node = getNext(node)){
+        if(strcmp(getInfo(node), info) == 0){
+            return 1;
+        }
+    }
+    return 0;
 }

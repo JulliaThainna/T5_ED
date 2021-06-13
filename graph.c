@@ -7,6 +7,7 @@
 #include "doublyLinkedList.h"
 #include "aresta.h"
 #include "vertice.h"
+#include "utilitario.h"
 
 /*Struct da lista de "vértices". Ex: 1 -> 2 -> 3*/
 /*
@@ -253,7 +254,7 @@ Graph dijkstraAlgorithm(Graph graph, char* nomeVI, char* nomeVF, float* distTota
             Aresta aresta = getInfo(node);
             char* idAux = arestaGetNomeVerticeFinal(aresta);
             float* dist = getValue(distancia, idAux);
-            if(/*TODO: Colocar condição aqui*/1){
+            if(stringInDoublyLinkedList(restantes, idAux)){
                 if(dist == NULL){
                     float* distTemp = malloc(sizeof(float));
                     *distTemp = getPeso(aresta) + *dAnt;
