@@ -174,6 +174,10 @@ void dmprbt(QuadTree* qt, char t, char* sfx, char* dirSaida, char* nomeGeoSemExt
 
     //Function para imprimir a arvore
     FILE* fileSvgQT = fopen(pathDmprbt, "w");
+    if(fileSvgQT){
+        return;
+    }
+    printf("Arquivo SVG-DMPRBT aberto com sucesso!");
 
     desenhaQt(qt[i], fileSvgQT);
 

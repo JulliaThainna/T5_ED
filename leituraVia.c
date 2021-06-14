@@ -28,7 +28,7 @@ void readVia(Graph graph, char* dirVia){
 
         else if(strcmp(comando, "v") == 0){
             fscanf(fileVia, "%s %f %f", id, &x, &y);
-            Vertice vertice = createVertice(nome, x, y);
+            Vertice vertice = createVertice(id, x, y);
             adicionaVertice(graph, vertice);
         }
         else if(strcmp(comando, "e") == 0){

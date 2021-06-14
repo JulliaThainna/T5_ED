@@ -1,6 +1,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include <ctype.h>
 
 #include "endereco.h"
 #include "point.h"
@@ -19,20 +20,20 @@ Endereco criaEndereco(Quadra quad, char* cpf, char face, int num, char* compl){
     EnderecoStruct* endereco = (EnderecoStruct*) malloc(sizeof(EnderecoStruct));
     float x = quadraGetX(quad);
     float y = quadraGetY(quad);
-    float h = quadraGetWidth(quad);
-    float w = quadraGetHeight(quad);
-    switch (face){
-    case 'n':
+    float w = quadraGetWidth(quad);
+    float h = quadraGetHeight(quad);
+    switch (toupper(face)){
+    case 'N':
         x += num;
         y += h;
         break;
-    case 's':
+    case 'S':
         x += num;
         break;
-    case 'l':
+    case 'L':
         y += num;
         break;
-    case 'o':
+    case 'O':
         x += w;
         y += num;
         break;
@@ -45,8 +46,6 @@ Endereco criaEndereco(Quadra quad, char* cpf, char face, int num, char* compl){
     endereco->numero = num;
     return endereco;
 }
-
-
 
 void enderecoSetCpf(Endereco endereco, char* cpf) {
     EnderecoStruct* e = (EnderecoStruct*) endereco;

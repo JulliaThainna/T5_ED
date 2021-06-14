@@ -28,8 +28,7 @@ void desenhaSvgGeo(QuadTree* qt, char* dirSaida){
         exit(1);
     }
     printf("Arquivo SVG GEO criado com sucesso!");
-    fprintf(fileSvgGeo, "<svg>");
-
+    fprintf(fileSvgGeo, "<svg version=\"1.1\" baseProfile=\"full\" width=\"10000\" height=\"10000\" xmlns=\"http://www.w3.org/2000/svg\">");
     fprintf(fileSvgGeo, "<defs>");
     for(int i = 0; i < 6; i++){
         fprintf(fileSvgGeo, "<filter id=\"shadow%d\">\n\t\t\t<feDropShadow dx=\"4\" dy=\"4\" stdDeviation=\"0.2\" flood-color=\"%s\"/>\n\t\t</filter>", i, corSombra[i]);
@@ -58,7 +57,7 @@ void desenhaSvgQry(QuadTree* qt, char* dirSaida){
         exit(1);
     }
     printf("Arquivo SVG QRY criado com sucesso!");
-    fprintf(fileSvgQry, "<svg>");
+    fprintf(fileSvgQry, "<svg version=\"1.1\" baseProfile=\"full\" width=\"10000\" height=\"10000\" xmlns=\"http://www.w3.org/2000/svg\">");
 
     fprintf(fileSvgQry, "<defs>");
     for(int i = 0; i < 6; i++){

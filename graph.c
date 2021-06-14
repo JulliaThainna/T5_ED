@@ -115,7 +115,6 @@ POS: Não há retorno
 void desalocaAdjascentList(AdjascentList adjascentList){
     AdjascentListStruct* als = (AdjascentListStruct*)adjascentList;
     removeList(als->arestas, 1);
-    //desalocaVertice(als->inicio);
     //Desaloca o point dentro do vertice e desaloca o vertice
     free(verticeGetPoint(als->arestas));
     free(als->inicio);
@@ -137,7 +136,7 @@ Essa função desenha uma única aresta no SVG.
 PRE: Variável Grafo, variável AdjascentList, uma Aresta e o FILE* em que o svg será gerado
 POS: Não há retorno
 */
-void desenhaArestaSvg(Graph graph, AdjascentList adjascentList, Aresta aresta, FILE *fileSvg){
+void desenhaArestaSvg(Graph graph, AdjascentList adjascentList, Aresta aresta, char* corAresta, FILE *fileSvg){
     //Pra desenhar uma aresta eu preciso de duas listas adjascentes
     //Porque? Porque dentro das listas adjascentes tem a posição (point) dos vertice
     AdjascentListStruct *alsVI = (AdjascentListStruct *)adjascentList;
@@ -148,10 +147,10 @@ void desenhaArestaSvg(Graph graph, AdjascentList adjascentList, Aresta aresta, F
     float x2 = verticeGetX(alsVF->inicio);
     float y2 = verticeGetY(alsVF->inicio);
 
-    fprintf(fileSvg, "\n\t<line x1=\"%lf\" y1=\"%lf\" x2=\"%lf\" y2=\"%lf\" style=\"stroke:red;stroke-width:2\"/>\n", x1, y1, x2, y2);
+    fprintf(fileSvg, "\n\t<line x1=\"%lf\" y1=\"%lf\" x2=\"%lf\" y2=\"%lf\" style=\"stroke:%s;stroke-width:2\"/>\n", x1, y1, x2, y2, corAresta);
 }
 
-void desenhaGrafoSvg(Graph graph, FILE *fileSvg){
+void desenhaGrafoSvg(Graph graph, FILE *fileSvg, char* corAresta, char* corVertice){
     //Desenha todas as arestas
     for(Node aux = getFirst(graph); aux != NULL; aux = getNext(aux)){
         AdjascentList al = getInfo(aux);
@@ -160,7 +159,7 @@ void desenhaGrafoSvg(Graph graph, FILE *fileSvg){
         //Percorre a lista de arestas imprimindo cada aresta
         for(Node auxArestas = getFirst(arestas); auxArestas != NULL; auxArestas = getNext(auxArestas)){
             Aresta aresta = getInfo(auxArestas);
-            desenhaArestaSvg(graph, al, aresta, fileSvg);
+            desenhaArestaSvg(graph, al, aresta, corAresta, fileSvg);
         }
     }
 
@@ -169,14 +168,41 @@ void desenhaGrafoSvg(Graph graph, FILE *fileSvg){
         AdjascentList al = getInfo(aux);
         //Info é AdjascentList
         Vertice vert = graphGetVertice(al);
-        desenhaVerticeSvg(vert, fileSvg);
+        desenhaVerticeSvg(vert, corVertice, fileSvg);
     }
+}
+
+Graph convertToUndirectedGraph(Graph directedGraph){
+    Graph graph = createGraph();
+
+    //Adiciona os vertices do grafo direcionado em outro grafo
+    for(Node node = getFirst(directedGraph); node != NULL; node = getNext(node)){
+        AdjascentListStruct* al = getInfo(node);
+        Vertice vertice = createVertice(verticeGetNome(al->inicio), verticeGetX(al->inicio), verticeGetY(al->inicio));
+        adicionaVertice(graph, vertice);
+    }
+
+    //Percorre a lista de Vertices do grafo direcionado para assim percorrer a lista de arestas
+    for(Node nodeV = getFirst(directedGraph); nodeV != NULL; nodeV = getNext(nodeV)){
+        //Percorre as arestas de cada vertice
+        for(Node nodeA = getFirst(graphGetArestas(getInfo(nodeV))); nodeA != NULL; nodeA = getNext(nodeA)){
+            Aresta aresta = getInfo(nodeA);
+            Aresta a1 = createAresta(arestaGetNome(aresta), arestaGetNomeVerticeInicial(aresta), arestaGetNomeVerticeFinal(aresta), arestaGetLdir(aresta), arestaGetLesq(aresta), arestaGetCmp(aresta), arestaGetVm(aresta));
+            Aresta a2 = createAresta(arestaGetNome(aresta), arestaGetNomeVerticeFinal(aresta), arestaGetNomeVerticeInicial(aresta), arestaGetLdir(aresta), arestaGetLesq(aresta), arestaGetCmp(aresta), arestaGetVm(aresta));
+            adicionaAresta(graph, a1);
+            adicionaAresta(graph, a2);
+        }
+    }
+    return graph;
 }
 
 Graph primAlgorithm(Graph graph){
     HashTable htVisitados = createHashTable(100);
     Graph agm = createGraph();
 
+    float menorCmp;
+    Aresta aresta;
+    int first;
     char *nomeVI, *nomeVF;
     char visitado[] = "1";
 
@@ -193,9 +219,7 @@ Graph primAlgorithm(Graph graph){
     insertValueHashTable(htVisitados, verticeGetNome(vertice), visitado);
 
     while(1){
-        float menorCmp;
-        Aresta aresta;
-        int first = 1;
+        first = 1;
 
         for(Node i = getFirst(graph); i != NULL; i = getNext(i)){
             AdjascentListStruct *adl = getInfo(i);
@@ -203,7 +227,7 @@ Graph primAlgorithm(Graph graph){
             if(isKeyHashTable(htVisitados, verticeGetNome(vertice)) != 0){
                 for(Node j = getFirst(adl->arestas); j != NULL; j = getNext(j)){
                     if(isKeyHashTable(htVisitados, arestaGetNomeVerticeFinal(getInfo(j))) == 0){
-                        if(first != 0){
+                        if(first){
                             nomeVI = verticeGetNome(vertice);
                             aresta = getInfo(j);
                             nomeVF = arestaGetNomeVerticeFinal(aresta);
@@ -220,7 +244,7 @@ Graph primAlgorithm(Graph graph){
                 }
             }
         }
-        if(first != 0){
+        if(first){
             break;
         }
         Aresta a1 = createAresta(arestaGetNome(aresta), nomeVI, nomeVF, arestaGetLdir(aresta), arestaGetLesq(aresta), arestaGetCmp(aresta), arestaGetVm(aresta));
@@ -230,7 +254,7 @@ Graph primAlgorithm(Graph graph){
         insertValueHashTable(htVisitados, nomeVF, visitado);
     }
     // TODO: Arrumar algum jeito para não dar double free ou free em coisa invalida quando chamar removeHashTable
-    removeHashTable(htVisitados);
+    // removeHashTable(htVisitados);
     return agm;
 }
 

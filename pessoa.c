@@ -5,11 +5,11 @@
 #include "pessoa.h"
 
 typedef struct {
-    char cpf[20];
-    char nome[30];
-    char sobrenome[30];
+    char cpf[200];
+    char nome[300];
+    char sobrenome[300];
     char sexo;
-    char dataNascimento[11];
+    char dataNascimento[110];
 }PessoaStruct;
 
 Pessoa criaPessoa(char* cpf, char* nome, char* sobrenome, char sexo, char* dataNascimento){

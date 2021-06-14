@@ -5,6 +5,8 @@
 #include "leituraQry.h"
 #include "quadTree.h"
 #include "hashTable.h"
+#include "graph.h"
+
 #include "linha.h"
 #include "retangulo.h"
 #include "point.h"
@@ -30,7 +32,7 @@ enum LISTAS{
     ENDERECOS
 };
 
-void readQry(QuadTree *qt, HashTable *ht, char *dirQry, char *dirTxt, char *dirSaida, char *nomeGeoSemExtensao, char *nomeQrySemExtensao){
+void readQry(QuadTree *qt, HashTable *ht, Graph graph, char *dirQry, char *dirTxt, char *dirSaida, char *nomeGeoSemExtensao, char *nomeQrySemExtensao){
 
     FILE *fileTxt = NULL;
     fileTxt = fopen(dirTxt, "w");
@@ -203,30 +205,39 @@ void readQry(QuadTree *qt, HashTable *ht, char *dirQry, char *dirTxt, char *dirS
         //@m?
         if(strcmp(comando, "@m?") == 0){
             fscanf(fileQry, "%s %s", reg, cpf);
+            mInt(qt, ht, registradores, reg, cpf);
         }
         if(strcmp(comando, "@e?") == 0){
             fscanf(fileQry, "%s %s %c %d", reg, cep, &face, &num);
+            eInt(qt, ht, registradores, reg, cep, face, num);
         }
         if(strcmp(comando, "@g?") == 0){
             fscanf(fileQry, "%s %s", reg, id);
+            gInt(qt, registradores, reg, id);
         }
         if(strcmp(comando, "@xy") == 0){
             fscanf(fileQry, "%s %f %f", reg, &x, &y);
+            xy(qt, registradores, reg, x, y);
         }
         if(strcmp(comando, "ccv") == 0){
             fscanf(fileQry, "%s", sfx);
+            ccv(graph, sfx, dirSaida, nomeGeoSemExtensao, nomeQrySemExtensao);
         }
-        if (strcmp(comando, "p?") == 0){
+        if(strcmp(comando, "p?") == 0){
             fscanf(fileQry, "%s %s %s %s %s", sfx, reg1, reg2, cmc, cmr);
+            //TODO: p?
         }
-        if (strcmp(comando, "bf") == 0){
+        if(strcmp(comando, "bf") == 0){
             fscanf(fileQry, "%d", &max);
+            //TODO: bf?
         }
-        if (strcmp(comando, "sp?") == 0){
+        if(strcmp(comando, "sp?") == 0){
             fscanf(fileQry, "%s %s %s %s %s", sfx, reg1, reg2, cmc, cmr);
+            //TODO: sp?
         }
-        if (strcmp(comando, "pb?") == 0){
+        if(strcmp(comando, "pb?") == 0){
             fscanf(fileQry, "%s %s %s %s", sfx, reg1, reg2, cmc);
+            //TODO: pb?
         }
     }
 

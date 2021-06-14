@@ -32,7 +32,7 @@ void readPm(QuadTree* qt, HashTable* ht, char* dirPm){
     printf("Arquivo PM aberto com sucesso!");
 
     //Parametros
-    char comando[2], cpf[30], nome[30], sobrenome[30], sexo, nasc[11], cep[20], face, compl[10];
+    char comando[200], cpf[300], nome[300], sobrenome[300], sexo, nasc[110], cep[200], face, compl[100];
     int num;
 
     while(1){
@@ -54,7 +54,6 @@ void readPm(QuadTree* qt, HashTable* ht, char* dirPm){
             fscanf(filePm, "%s %s %c %d %s", cpf, cep, &face, &num, compl);
             Quadra qAux = getInfoByIdQt(qt[QUADRA], cep);
             if(qAux == NULL){
-                printf("Quadra = NULL pm 57");
                 return;
             }
             Endereco endereco = criaEndereco(qAux, cpf, face, num, compl);

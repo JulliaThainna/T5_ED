@@ -37,7 +37,7 @@ float verticeGetY(Vertice vertice){
     return getPointY(vert->point);
 }
 
-void desenhaVerticeSvg(Vertice vertice, FILE* fileSvg){
-    fprintf(fileSvg, "\n\t<circle cx=\"%f\" cy=\"%f\" r=\"10\" stroke=\"black\" fill=\"white\" stroke-width=\"0.5\" />", verticeGetX(vertice), verticeGetY(vertice));
-    fprintf(fileSvg, "\n\t<text x=\"%f\" y=\"%f\" text-anchor=\"middle\" font-size=\"0.5em\">%s</text>", verticeGetX(vertice), verticeGetY(vertice), verticeGetNome(vertice));
+void desenhaVerticeSvg(Vertice vertice, char* corVertice, FILE* fileSvg){
+    fprintf(fileSvg, "\n\t<circle cx=\"%f\" cy=\"%f\" r=\"10\" stroke=\"%s\" fill=\"white\" stroke-width=\"0.5\" />", verticeGetX(vertice), verticeGetY(vertice), corVertice);
+    fprintf(fileSvg, "\n\t<text x=\"%f\" y=\"%f\" text-anchor=\"middle\" font-size=\"0.13em\">%s</text>", verticeGetX(vertice), verticeGetY(vertice), verticeGetNome(vertice));
 }

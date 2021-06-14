@@ -15,6 +15,6 @@ float verticeGetX(Vertice vertice);
 
 float verticeGetY(Vertice vertice);
 
-void desenhaVerticeSvg(Vertice vertice, FILE *fileSvg);
+void desenhaVerticeSvg(Vertice vertice, char* corVertice, FILE* fileSvg);
 
 #endif

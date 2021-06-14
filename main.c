@@ -51,8 +51,10 @@ int main()
 //Custom Headers para estruturas e organização
 #include "doublyLinkedList.h"
 #include "quadTree.h"
+#include "graph.h"
 #include "leituraEc.h"
 #include "leituraPm.h"
+#include "leituraVia.h"
 
 //Enumeration para todas as listas utilizadas
 enum LISTAS{
@@ -101,8 +103,10 @@ int main(int argc, char *argv[]){
     char* dirTxt = NULL;
     //Diretorio dirEntrada + arqEc
     char* dirEc = NULL;
-    //Diretorio dirEntrada + arqEc
+    //Diretorio dirEntrada + arqPm
     char* dirPm = NULL;
+    //Diretorio dirEntrada + arqVia
+    char* dirVia = NULL;
 
     CorPadrao cores = criaCorPadrao("0.5", "coral", "saddlebrown", "0.5", "red", "darkred", "0.5", "deeppink", "mediumvioletred", "0.5", "green", "red", "0.5", "0.5");
 
@@ -146,9 +150,11 @@ int main(int argc, char *argv[]){
         hashTables[i] = createHashTable(100);
     }
 
-    //Refatorar trataString para retornar char*
+    // TODO: Refatorar trataString para retornar char*
     concatenaCaminhos(dirEntrada, arqGeo, &dirGeo);
     readGeo(listas, dirGeo, cores);
+
+    Graph graph = createGraph();
 
     //Define QuadTrees
     QuadTree quadTrees[13];
@@ -175,6 +181,11 @@ int main(int argc, char *argv[]){
             concatenaCaminhos(dirEntrada, arqPm, &dirPm);
             readPm(quadTrees, hashTables, dirPm);
         }
+        if(arqVia != NULL){
+            //Lê os comandos do Via
+            concatenaCaminhos(dirEntrada, arqVia, &dirVia);
+            readVia(graph, dirVia);
+        }
 
         //Comando para criar o caminho que será utilizado para abrir o .qry
         concatenaCaminhos(dirEntrada, arqQry, &dirQry);
@@ -191,7 +202,7 @@ int main(int argc, char *argv[]){
         //Concatena o caminho de saida com o nome gerado no comando acima (saida do TXT)
         concatenaCaminhos(dirSaida, nomeArquivoLogTxt, &dirTxt);
         //Lê os comandos do QRY
-        readQry(quadTrees, hashTables, dirQry, dirTxt, dirSaida, nomeGeoSemExtensao, nomeQrySemExtensao);
+        readQry(quadTrees, hashTables, graph, dirQry, dirTxt, dirSaida, nomeGeoSemExtensao, nomeQrySemExtensao);
         //Desenha o svg do QRY
         desenhaSvgQry(quadTrees, dirSaidaGeoQry);
     }
@@ -199,9 +210,9 @@ int main(int argc, char *argv[]){
     for(int i = 0; i < 8; i++){
         removeList(listas[i], 0);
     }
-    for(int i = 0; i < 13; i++){
-        desalocaQt(quadTrees[i]);
-    }
+    // for(int i = 0; i < 13; i++){
+    //     desalocaQt(quadTrees[i]);
+    // }
 
     free(dirEntrada);
     free(arqGeo);
