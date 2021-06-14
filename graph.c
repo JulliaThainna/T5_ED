@@ -198,7 +198,6 @@ Graph primAlgorithm(Graph graph){
         int first = 1;
 
         for(Node i = getFirst(graph); i != NULL; i = getNext(i)){
-            // TODO: Perguntar pro pedro se há necessidade de pegar novamente o primeiro vertice
             AdjascentListStruct *adl = getInfo(i);
             vertice = adl->inicio;
             if(isKeyHashTable(htVisitados, verticeGetNome(vertice)) != 0){
@@ -313,5 +312,5 @@ Graph dijkstraAlgorithm(Graph graph, char* nomeVI, char* nomeVF, float* distTota
     removeHashTable(anterior);
     removeList(restantes, 0);
 
-    return path;
+    return path; 
 }

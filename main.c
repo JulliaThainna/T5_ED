@@ -31,7 +31,6 @@ int main()
 }
 */
 // TODO: Chamar função do .via e definir os grafos/ estruturas que ele precisa
-// TODO: Fazer qry5.c e .h
 
 //Standart Headers
 #include <stdio.h>
@@ -56,8 +55,7 @@ int main()
 #include "leituraPm.h"
 
 //Enumeration para todas as listas utilizadas
-enum LISTAS
-{
+enum LISTAS{
     CIRCULO,
     RETANGULO,
     TEXTO,
@@ -70,8 +68,7 @@ enum LISTAS
     QUADRA2
 };
 
-int main(int argc, char *argv[])
-{
+int main(int argc, char *argv[]){
     //Variáveis passadas como parametro para o Path
     char* dirEntrada = NULL;
     char* arqGeo = NULL;
