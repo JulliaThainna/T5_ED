@@ -10,6 +10,7 @@
 #include "quadTree.h"
 #include "hashTable.h"
 #include "trataString.h"
+#include "utilitario.h"
 
 //
 #include "endereco.h"
@@ -137,3 +138,24 @@ Graph ccv(Graph graphVia, char* sfx, char* dirSaida, char* nomeGeoSemExtensao, c
     return graphCiclovia;
 }
 
+void pInt(Graph graph, Point* registradores, char* sfx, char* r1, char* r2, char* cmc, char* cmr){
+    //Percorrer os vertices do grafo
+    //Achar o ponto do vértice que se aproxime mais do ponto de r1 e r2
+
+    //Pega os pontos que estão nos registrados R1 e R2
+    Point p1 = registradores[indiceRegistrador(r1)];
+    Point p2 = registradores[indiceRegistrador(r2)];
+
+    //Retorna se não tiver conteudo nos registradores
+    // TODO: Verificar se isso daqui tem que comparar com -1
+    if(p1 == NULL || p2 == NULL){
+        return;
+    }
+    
+    //Aqui vamos calcular qual o vertice do grafo mais perto de R1 e R2 comparando a distância entre os pontos
+    for(Node node = getFirst(graph); node != NULL; node = getNext(node)){
+        AdjascentList al = getInfo(node);
+        Vertice v = graphGetVertice(al);
+    }
+
+}
