@@ -150,6 +150,11 @@ void desenhaArestaSvg(Graph graph, AdjascentList adjascentList, Aresta aresta, c
     fprintf(fileSvg, "\n\t<line x1=\"%lf\" y1=\"%lf\" x2=\"%lf\" y2=\"%lf\" style=\"stroke:%s;stroke-width:2\"/>\n", x1, y1, x2, y2, corAresta);
 }
 
+/*
+Essa função desenha um grafo num FILE com as cores determinadas
+PRE: Variável grafo, um FILE*, a cor da aresta e do vertice
+POS: Nada
+*/
 void desenhaGrafoSvg(Graph graph, FILE *fileSvg, char* corAresta, char* corVertice){
     //Desenha todas as arestas
     for(Node aux = getFirst(graph); aux != NULL; aux = getNext(aux)){
@@ -172,6 +177,11 @@ void desenhaGrafoSvg(Graph graph, FILE *fileSvg, char* corAresta, char* corVerti
     }
 }
 
+/*
+Essa função recebe um grafo direcionado e retorna um novo grafo não-direcionado
+PRE: Variável grafo direcionado
+POS: Variável grafo não-direcionado
+*/
 Graph convertToUndirectedGraph(Graph directedGraph){
     Graph graph = createGraph();
 
@@ -196,6 +206,11 @@ Graph convertToUndirectedGraph(Graph directedGraph){
     return graph;
 }
 
+/*
+Retira do grafo os vertices que não possuem nenhuma aresta partindo ou indo pra ele. Altera o original.
+PRE: Variável grafo
+POS: Variável grafo
+*/
 Graph removeVerticeDesconexo(Graph graph){
     Node node = getFirst(graph);
     while(node != NULL){
@@ -228,6 +243,11 @@ Graph removeVerticeDesconexo(Graph graph){
     return graph;
 }
 
+/*
+O algoritmo de prim faz uma arvore geradora mínima
+PRE: Grafo grafo
+POS: Grafo arvoreGeradoraMinima
+*/
 Graph primAlgorithm(Graph graph){
     HashTable htVisitados = createHashTable(500);
     Graph agm = createGraph();
@@ -290,6 +310,11 @@ Graph primAlgorithm(Graph graph){
     return agm;
 }
 
+/*
+Essa função realiza o algoritmo de Dijkstra e retorna uma lista de ids de vertices entre dois vertices
+PRE: Variável grafo, idVerticeInicial, idVerticeFinal, um pointer para salvar a distancia total e a função para pegar o peso de uma aresta
+POS: Uma lista de strings com ids dos vertices do ponto final até o ponto inicial 
+*/
 Graph dijkstraAlgorithm(Graph graph, char* nomeVI, char* nomeVF, float* distTotal, float getPeso(Aresta aresta)){
     DoublyLinkedList restantes = create();
     HashTable distancia = createHashTable(100);
