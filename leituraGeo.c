@@ -40,7 +40,7 @@ void readGeo(DoublyLinkedList* listas, char* dirGeo, CorPadrao cores){
     if(!fileGeo){
         exit(1);
     }
-    printf("Arquivo GEO aberto com sucesso!");
+    printf("\nArquivo GEO aberto com sucesso!");
 
     //Numeros maximos de Elementos em cada lista;
      NxStruct dft;

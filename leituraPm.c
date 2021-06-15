@@ -29,7 +29,7 @@ void readPm(QuadTree* qt, HashTable* ht, char* dirPm){
     if(!filePm){
         exit(1);
     }
-    printf("Arquivo PM aberto com sucesso!");
+    printf("\nArquivo PM aberto com sucesso!");
 
     //Parametros
     char comando[200], cpf[300], nome[300], sobrenome[300], sexo, nasc[110], cep[200], face, compl[100];

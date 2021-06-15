@@ -71,14 +71,13 @@ void getNomeConcatExtension(char f[], char ext[], char** result){
     if(temBarra){
         aux = strrchr(f, '/') + 1;
     }
-    printf("\n%s\n", aux);
     *result = malloc(strlen(aux) + strlen(ext) + 1);
     strcpy(*result, aux);
     strcat(*result, ext);
 }
 
 void extraiNome(char f[], char** result){
-    printf("\nRetirando o nome do arquivo da sentença: \"%s\"\n", f);
+    //printf("\nRetirando o nome do arquivo da sentença: \"%s\"\n", f);
     char* aux = NULL;
     int tamF = strlen(f);
     //Encontra pos do último / no f

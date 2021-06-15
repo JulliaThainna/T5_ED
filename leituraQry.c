@@ -39,17 +39,17 @@ void readQry(QuadTree *qt, HashTable *ht, Graph graph, char *dirQry, char *dirTx
     if(!fileTxt){
         exit(1);
     }
-    printf("Arquivo TXT aberto com sucesso!");
+    printf("\nArquivo TXT aberto com sucesso!");
 
     FILE *fileQry = NULL;
     fileQry = fopen(dirQry, "r");
     if(!fileQry){
         exit(1);
     }
-    printf("Arquivo QRY aberto com sucesso!");
+    printf("\nArquivo QRY aberto com sucesso!");
 
-    Point registradores[10];
-    for(int i = 0; i < 10; i++){
+    Point registradores[11];
+    for(int i = 0; i < 11; i++){
         registradores[i] = criaPoint(-1, -1);
     }
     char j[100], k[100], comando[100], cb[100], cp[100], cep[100], face, t, sfx[100], cpf[100], cnpj[100], compl[100], tp[100], reg[100], reg1[100], reg2[100], cmc[100], cmr[100], id[100];

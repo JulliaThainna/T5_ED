@@ -196,15 +196,48 @@ Graph convertToUndirectedGraph(Graph directedGraph){
     return graph;
 }
 
+Graph removeVerticeDesconexo(Graph graph){
+    Node node = getFirst(graph);
+    while(node != NULL){
+        int isConnected = 0;
+        AdjascentList al = getInfo(node);
+        DoublyLinkedList arestas = graphGetArestas(al);
+        if(isEmpty(arestas) == 1){
+            for(Node nodeV = getFirst(graph); nodeV != NULL; nodeV = getNext(nodeV)){
+                AdjascentList alAux = getInfo(nodeV);
+                for(Node nodeA = getFirst(graphGetArestas(alAux)); nodeA != NULL; nodeA = getNext(nodeA)){
+                    if(strcmp(arestaGetNomeVerticeFinal(getInfo(nodeA)), verticeGetNome(graphGetVertice(al))) == 0){
+                        isConnected = 1;
+                    }
+                }
+            }
+        }
+        else{
+            isConnected = 1;
+        }
+
+        if(isConnected == 0){
+            Node aux = getNext(node);
+            removeNode(graph, node, 0);
+            node = aux;
+            continue;
+        }
+        node = getNext(node);
+    }
+
+    return graph;
+}
+
 Graph primAlgorithm(Graph graph){
-    HashTable htVisitados = createHashTable(100);
+    HashTable htVisitados = createHashTable(500);
     Graph agm = createGraph();
 
     float menorCmp;
     Aresta aresta;
     int first;
     char *nomeVI, *nomeVF;
-    char visitado[] = "1";
+    char visitado[10] = "1";
+    Vertice vertice;
 
     //Cria uma cópia dos vertices para a arvore geradora minima
     for(Node aux = getFirst(graph); aux != NULL; aux = getNext(aux)){
@@ -215,18 +248,17 @@ Graph primAlgorithm(Graph graph){
     }
 
     //Adiciona o primeiro node na HT de visitados
-    Vertice vertice = graphGetVertice(getInfo(getFirst(graph)));
+    vertice = graphGetVertice(getInfo(getFirst(graph)));
     insertValueHashTable(htVisitados, verticeGetNome(vertice), visitado);
 
     while(1){
         first = 1;
-
         for(Node i = getFirst(graph); i != NULL; i = getNext(i)){
-            AdjascentListStruct *adl = getInfo(i);
+            AdjascentListStruct* adl = getInfo(i);
             vertice = adl->inicio;
-            if(isKeyHashTable(htVisitados, verticeGetNome(vertice)) != 0){
+            if(getValue(htVisitados, verticeGetNome(vertice)) != NULL){
                 for(Node j = getFirst(adl->arestas); j != NULL; j = getNext(j)){
-                    if(isKeyHashTable(htVisitados, arestaGetNomeVerticeFinal(getInfo(j))) == 0){
+                    if(getValue(htVisitados, arestaGetNomeVerticeFinal(getInfo(j))) == NULL){
                         if(first){
                             nomeVI = verticeGetNome(vertice);
                             aresta = getInfo(j);
@@ -234,7 +266,7 @@ Graph primAlgorithm(Graph graph){
                             menorCmp = arestaGetCmp(aresta);
                             first = 0;
                         }
-                        else if(arestaGetCmp(getInfo(j)) > menorCmp){
+                        else if(menorCmp > arestaGetCmp(getInfo(j))){
                             nomeVI = verticeGetNome(vertice);
                             aresta = getInfo(j);
                             nomeVF = arestaGetNomeVerticeFinal(aresta);
@@ -338,3 +370,4 @@ Graph dijkstraAlgorithm(Graph graph, char* nomeVI, char* nomeVF, float* distTota
 
     return path; 
 }
+

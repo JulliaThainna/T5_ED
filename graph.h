@@ -19,6 +19,7 @@ void desalocaGrafo(Graph graph);
 void desenhaArestaSvg(Graph graph, AdjascentList adjascentList, Aresta aresta, char* corAresta, FILE *fileSvg);
 void desenhaGrafoSvg(Graph graph, FILE *fileSvg, char* corAresta, char* corVertice);
 Graph convertToUndirectedGraph(Graph directedGraph);
+Graph removeVerticeDesconexo(Graph graph);
 Graph primAlgorithm(Graph graph);
 Graph dijkstraAlgorithm(Graph graph, char* nomeVI, char* nomeVF, float* distTotal, float getPeso(Aresta aresta));
 

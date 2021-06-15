@@ -11,7 +11,7 @@ typedef struct{
 } HashTableStruct;
 
 typedef struct{
-    char key[20];
+    char key[500];
     InfoHash value;
 } HashDataStruct;
 

@@ -28,7 +28,7 @@ int indiceRegistrador(char* r){
     rAux = rAux + 1;
     int indice = atoi(rAux);
     free(rAux - 1);
-    return indice - 1;
+    return indice;
 }   
 
 void mInt(QuadTree* qt, HashTable* ht, Point* registrador, char* r, char* cpf){
@@ -110,7 +110,8 @@ void xy(QuadTree* qt, Point* registrador, char* r, float x, float y){
 }
 
 Graph ccv(Graph graphVia, char* sfx, char* dirSaida, char* nomeGeoSemExtensao, char* nomeQrySemExtensao){
-    Graph graphCiclovia = primAlgorithm(convertToUndirectedGraph(graphVia));
+    Graph v = removeVerticeDesconexo(graphVia);
+    Graph graphCiclovia = primAlgorithm(convertToUndirectedGraph(v));
 
     char* nomeGeoQry = NULL;
     char* nomeGeoQrySfx = NULL;
@@ -123,7 +124,7 @@ Graph ccv(Graph graphVia, char* sfx, char* dirSaida, char* nomeGeoSemExtensao, c
     if(fileSvg == NULL){
         return NULL;
     }
-    printf("Arquivo SVG-CCV aberto com sucesso!");
+    printf("\nArquivo SVG-%s aberto com sucesso!", sfx);
         
     fprintf(fileSvg, "\n<svg width=\"10000\" height=\"10000\" xmlns=\"http://www.w3.org/2000/svg\">");
 
@@ -133,6 +134,6 @@ Graph ccv(Graph graphVia, char* sfx, char* dirSaida, char* nomeGeoSemExtensao, c
     fprintf(fileSvg, "\n</svg>");
 
     fclose(fileSvg);
-
     return graphCiclovia;
 }
+

@@ -220,7 +220,6 @@ int inside(QuadTree* qt, char* j, float x, float y, float* centroMassaX, float* 
 
 
 void pnt(QuadTree* qt, char* j, char* cb, char* cp, FILE* fileTxt){
-    printf("%s %s %s", j, cb, cp);
     Circulo circulo = getInfoByIdQt(qt[0], j);
     Retangulo retangulo = getInfoByIdQt(qt[1], j);
     Texto texto = getInfoByIdQt(qt[2], j);

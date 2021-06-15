@@ -13,7 +13,7 @@ void readVia(Graph graph, char* dirVia){
     if(fileVia == NULL){
         exit(1);
     }
-    printf("Arquivo VIA aberto com sucesso!");
+    printf("\nArquivo VIA aberto com sucesso!");
     
     //Parametros
     char comando[100], id[100], i[100], j[100], ldir[100], lesq[100], nome[100];

@@ -27,7 +27,7 @@ void desenhaSvgGeo(QuadTree* qt, char* dirSaida){
     if(!fileSvgGeo){
         exit(1);
     }
-    printf("Arquivo SVG GEO criado com sucesso!");
+    printf("\nArquivo SVG-GEO criado com sucesso!");
     fprintf(fileSvgGeo, "<svg version=\"1.1\" baseProfile=\"full\" width=\"10000\" height=\"10000\" xmlns=\"http://www.w3.org/2000/svg\">");
     fprintf(fileSvgGeo, "<defs>");
     for(int i = 0; i < 6; i++){
@@ -56,7 +56,7 @@ void desenhaSvgQry(QuadTree* qt, char* dirSaida){
     if(!fileSvgQry){
         exit(1);
     }
-    printf("Arquivo SVG QRY criado com sucesso!");
+    printf("\nArquivo SVG-QRY criado com sucesso!");
     fprintf(fileSvgQry, "<svg version=\"1.1\" baseProfile=\"full\" width=\"10000\" height=\"10000\" xmlns=\"http://www.w3.org/2000/svg\">");
 
     fprintf(fileSvgQry, "<defs>");
