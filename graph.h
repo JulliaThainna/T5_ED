@@ -70,14 +70,14 @@ Essa função desenha uma única aresta no SVG.
 PRE: Variável Grafo, variável AdjascentList, uma Aresta e o FILE* em que o svg será gerado
 POS: Não há retorno
 */
-void desenhaArestaSvg(Graph graph, AdjascentList adjascentList, Aresta aresta, char* corAresta, FILE *fileSvg);
+void desenhaArestaSvg(Graph graph, AdjascentList adjascentList, Aresta aresta, char* corAresta, FILE* fileSvg);
 
 /*
 Essa função desenha um grafo num FILE com as cores determinadas
 PRE: Variável grafo, um FILE*, a cor da aresta e do vertice
 POS: Nada
 */
-void desenhaGrafoSvg(Graph graph, FILE *fileSvg, char* corAresta, char* corVertice);
+void desenhaGrafoSvg(Graph graph, FILE* fileSvg, char* corAresta, char* corVertice);
 
 /*
 Essa função recebe um grafo direcionado e retorna um novo grafo não-direcionado

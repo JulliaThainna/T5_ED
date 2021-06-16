@@ -11,6 +11,7 @@
 #include "hashTable.h"
 #include "trataString.h"
 #include "utilitario.h"
+#include "path.h"
 
 #include "endereco.h"
 #include "point.h"
@@ -141,7 +142,7 @@ Graph ccv(Graph graphVia, char* sfx, char* dirSaida, char* nomeGeoSemExtensao, c
     return graphCiclovia;
 }
 
-void pInt(QuadTree* qt, Graph graph, Point* registradores, char* sfx, char* r1, char* r2, char* cmc, char* cmr, char* nomeGeoSemExtensao, char* nomeQrySemExtensao, char* dirSaida){
+void pInt(QuadTree* qt, Graph graph, Point* registradores, char* sfx, char* r1, char* r2, char* cmc, char* cmr, char* nomeGeoSemExtensao, char* nomeQrySemExtensao, char* dirSaida, int idPInt){
 
     /*
     Temos dois pontos
@@ -157,24 +158,26 @@ void pInt(QuadTree* qt, Graph graph, Point* registradores, char* sfx, char* r1, 
     int indice1 = indiceRegistrador(r1);
     int indice2 = indiceRegistrador(r2);
 
-    Point p1 = registradores[indice1];
-    Point p2 = registradores[indice2];
+    Point pInicial = registradores[indice1];
+    Point pFinal = registradores[indice2];
+
+    //TODO: Fazer verificação
 
     //Define a menor distancia até agora com a distancia dos pontos com o primeiro vertice
-    float menorDist1 = distanciaEntrePontos(getPointX(p1), getPointY(p1), verticeGetX(graphGetVertice(getInfo(getFirst(graph)))), verticeGetY(graphGetVertice(getInfo(getFirst(graph)))));
-    float menorDist2 = distanciaEntrePontos(getPointX(p2), getPointY(p2), verticeGetX(graphGetVertice(getInfo(getFirst(graph)))), verticeGetY(graphGetVertice(getInfo(getFirst(graph)))));
+    float menorDistP1 = distanciaEntrePontos(getPointX(pInicial), getPointY(pInicial), verticeGetX(graphGetVertice(getInfo(getFirst(graph)))), verticeGetY(graphGetVertice(getInfo(getFirst(graph)))));
+    float menorDistP2 = distanciaEntrePontos(getPointX(pFinal), getPointY(pFinal), verticeGetX(graphGetVertice(getInfo(getFirst(graph)))), verticeGetY(graphGetVertice(getInfo(getFirst(graph)))));
     
     char nomeVI[100];
     char nomeVF[100];
 
     for(Node node = getFirst(graph); node != NULL; node = getNext(node)){
         AdjascentList al = getInfo(node);
-        if(distanciaEntrePontos(getPointX(p1), getPointY(p1), verticeGetX(graphGetVertice(getInfo(node))), verticeGetY(graphGetVertice(getInfo(node)))) < menorDist1){
-            menorDist1 = distanciaEntrePontos(getPointX(p1), getPointY(p1), verticeGetX(graphGetVertice(getInfo(node))), verticeGetY(graphGetVertice(getInfo(node))));
+        if(distanciaEntrePontos(getPointX(pInicial), getPointY(pInicial), verticeGetX(graphGetVertice(getInfo(node))), verticeGetY(graphGetVertice(getInfo(node)))) < menorDistP1){
+            menorDistP1 = distanciaEntrePontos(getPointX(pInicial), getPointY(pInicial), verticeGetX(graphGetVertice(getInfo(node))), verticeGetY(graphGetVertice(getInfo(node))));
             strcpy(nomeVI, verticeGetNome(graphGetVertice(al)));
         }
-        if(distanciaEntrePontos(getPointX(p2), getPointY(p2), verticeGetX(graphGetVertice(getInfo(node))), verticeGetY(graphGetVertice(getInfo(node)))) < menorDist2){
-            menorDist2 = distanciaEntrePontos(getPointX(p2), getPointY(p2), verticeGetX(graphGetVertice(getInfo(node))), verticeGetY(graphGetVertice(getInfo(node))));
+        if(distanciaEntrePontos(getPointX(pFinal), getPointY(pFinal), verticeGetX(graphGetVertice(getInfo(node))), verticeGetY(graphGetVertice(getInfo(node)))) < menorDistP2){
+            menorDistP2 = distanciaEntrePontos(getPointX(pFinal), getPointY(pFinal), verticeGetX(graphGetVertice(getInfo(node))), verticeGetY(graphGetVertice(getInfo(node))));
             strcpy(nomeVF, verticeGetNome(graphGetVertice(al)));
         }
     }
@@ -184,8 +187,8 @@ void pInt(QuadTree* qt, Graph graph, Point* registradores, char* sfx, char* r1, 
 
     // TODO: Fazer verificação se vertice existe pelo amor de deus
 
-    DoublyLinkedList pathCmp = dijkstraAlgorithm(graph, nomeVI, nomeVF, &distTotal, arestaGetCmp);
-    DoublyLinkedList pathVm = dijkstraAlgorithm(graph, nomeVI, nomeVF, &velocidadeTotal, arestaGetVm);
+    DoublyLinkedList listCmc = dijkstraAlgorithm(graph, nomeVI, nomeVF, &distTotal, arestaGetCmp);
+    DoublyLinkedList listVm = dijkstraAlgorithm(graph, nomeVI, nomeVF, &velocidadeTotal, arestaGetVm);
 
     //Organizar nome do arquivo
 
@@ -207,7 +210,7 @@ void pInt(QuadTree* qt, Graph graph, Point* registradores, char* sfx, char* r1, 
     printf("\nArquivo SVG-%s aberto com sucesso!", sfx);
 
 
-    fprintf(fileSvgGeo, "<svg version=\"1.1\" baseProfile=\"full\" width=\"10000\" height=\"10000\" xmlns=\"http://www.w3.org/2000/svg\">");
+    fprintf(fileSvgGeo, "<svg version=\"1.1\" baseProfile=\"full\" width=\"10000\" height=\"10000\" xmlns=\"http://www.w3.org/2000/svg\"  xmlns:xlink=\"http://www.w3.org/1999/xlink\">");
     fprintf(fileSvgGeo, "<defs>");
     for(int i = 0; i < 6; i++){
         fprintf(fileSvgGeo, "<filter id=\"shadow%d\">\n\t\t\t<feDropShadow dx=\"4\" dy=\"4\" stdDeviation=\"0.2\" flood-color=\"%s\"/>\n\t\t</filter>", i, corSombra[i]);
@@ -226,9 +229,13 @@ void pInt(QuadTree* qt, Graph graph, Point* registradores, char* sfx, char* r1, 
     /*
         Decidir como vamos fazer a animação da percurso
     */
-    
+
+    Path pathCmc = criaPath(graph, pInicial, pFinal, listCmc, distTotal, 6, cmc, idPInt);
+    Path pathCmr = criaPath(graph, pInicial, pFinal, listCmc, velocidadeTotal, 6, cmr, idPInt);
+    desenhaPathSvg(pathCmc, fileSvgGeo);
+    desenhaPathSvg(pathCmr, fileSvgGeo);
+
     fprintf(fileSvgGeo, "\n</svg>");
     fclose(fileSvgGeo);
-
 
 }
