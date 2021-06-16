@@ -221,6 +221,7 @@ void readQry(QuadTree *qt, HashTable *ht, Graph graph, char *dirQry, char *dirTx
         }
         if(strcmp(comando, "ccv") == 0){
             fscanf(fileQry, "%s", sfx);
+            // TODO: Receber graphCiclovia
             ccv(graph, sfx, dirSaida, nomeGeoSemExtensao, nomeQrySemExtensao);
         }
         if(strcmp(comando, "p?") == 0){
