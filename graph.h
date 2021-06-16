@@ -105,6 +105,6 @@ Essa função realiza o algoritmo de Dijkstra e retorna uma lista de ids de vert
 PRE: Variável grafo, idVerticeInicial, idVerticeFinal, um pointer para salvar a distancia total e a função para pegar o peso de uma aresta
 POS: Uma lista de strings com ids dos vertices do ponto final até o ponto inicial 
 */
-Graph dijkstraAlgorithm(Graph graph, char* nomeVI, char* nomeVF, float* distTotal, float getPeso(Aresta aresta));
+DoublyLinkedList dijkstraAlgorithm(Graph graph, char* nomeVI, char* nomeVF, float* distTotal, float getPeso(Aresta aresta));
 
 #endif

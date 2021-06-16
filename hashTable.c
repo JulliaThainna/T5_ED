@@ -34,10 +34,10 @@ HashTable createHashTable(int tamHT){
 
 void insertValueHashTable(HashTable ht, char* key, InfoHash value){
     //Converto o void* da hashtable para a struct
-    HashTableStruct* hts = (HashTableStruct *)ht;
+    HashTableStruct* hts = (HashTableStruct*)ht;
 
     //Crio um novo elemento HashDataStruct
-    HashDataStruct* hds = (HashDataStruct *)malloc(sizeof(HashDataStruct));
+    HashDataStruct* hds = (HashDataStruct*)malloc(sizeof(HashDataStruct));
 
     //Defino os valores
     strcpy(hds->key, key);

@@ -225,7 +225,7 @@ void readQry(QuadTree *qt, HashTable *ht, Graph graph, char *dirQry, char *dirTx
         }
         if(strcmp(comando, "p?") == 0){
             fscanf(fileQry, "%s %s %s %s %s", sfx, reg1, reg2, cmc, cmr);
-            //TODO: p?
+            pInt(qt, graph, registradores, sfx, reg1, reg2, cmc, cmr, nomeGeoSemExtensao, nomeQrySemExtensao, dirSaida);
         }
         if(strcmp(comando, "bf") == 0){
             fscanf(fileQry, "%d", &max);

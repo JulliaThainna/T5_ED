@@ -64,6 +64,7 @@ percurso. Caso sufx for -, continuar usando
 o mesmo arquivo de um comando p?
 anterior.
 */
+void pInt(QuadTree* qt, Graph graph, Point* registradores, char* sfx, char* r1, char* r2, char* cmc, char* cmr, char* nomeGeoSemExtensao, char* nomeQrySemExtensao, char* dirSaida);
 
 /*
 Interditar trechos de ruas (face de quadra)

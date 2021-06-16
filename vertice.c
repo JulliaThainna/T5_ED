@@ -17,7 +17,7 @@ Vertice createVertice(char* nome, float x, float y){
     return vert;
 }
 
-char *verticeGetNome(Vertice vertice){
+char* verticeGetNome(Vertice vertice){
     VerticeStruct* vert = (VerticeStruct*)vertice;
     return vert->nome;
 }

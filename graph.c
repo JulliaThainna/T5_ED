@@ -315,10 +315,10 @@ Essa função realiza o algoritmo de Dijkstra e retorna uma lista de ids de vert
 PRE: Variável grafo, idVerticeInicial, idVerticeFinal, um pointer para salvar a distancia total e a função para pegar o peso de uma aresta
 POS: Uma lista de strings com ids dos vertices do ponto final até o ponto inicial 
 */
-Graph dijkstraAlgorithm(Graph graph, char* nomeVI, char* nomeVF, float* distTotal, float getPeso(Aresta aresta)){
+DoublyLinkedList dijkstraAlgorithm(Graph graph, char* nomeVI, char* nomeVF, float* distTotal, float getPeso(Aresta aresta)){
     DoublyLinkedList restantes = create();
-    HashTable distancia = createHashTable(100);
-    HashTable anterior = createHashTable(100);
+    HashTable distancia = createHashTable(500);
+    HashTable anterior = createHashTable(500);
     float* aux = malloc(sizeof(float));
     *aux = 0;
 
@@ -339,7 +339,7 @@ Graph dijkstraAlgorithm(Graph graph, char* nomeVI, char* nomeVF, float* distTota
                     float* distTemp = malloc(sizeof(float));
                     *distTemp = getPeso(aresta) + *dAnt;
                     insertValueHashTable(distancia, idAux, distTemp);
-                    char* tempId = malloc(sizeof(char) * (strlen(nomeVI) + 1));
+                    char* tempId = malloc(sizeof(char) * (strlen(nomeVI) + 500));
                     strcpy(tempId, nomeVI);
                     insertValueHashTable(anterior, idAux, tempId);
                 }
@@ -383,7 +383,7 @@ Graph dijkstraAlgorithm(Graph graph, char* nomeVI, char* nomeVF, float* distTota
         }
     }
     DoublyLinkedList path = create();
-    while(nomeVF){
+    while(nomeVF != NULL){
         char* pathAux = malloc(sizeof(char) * (strlen(nomeVF) + 1));
         strcpy(pathAux, nomeVF);
         insert(path, pathAux);
@@ -393,6 +393,10 @@ Graph dijkstraAlgorithm(Graph graph, char* nomeVI, char* nomeVF, float* distTota
     removeHashTable(anterior);
     removeList(restantes, 0);
 
-    return path; 
+    DoublyLinkedList correctPath = reverseDoublyLinkedList(path);
+
+    removeList(path, 0);
+
+    return correctPath; 
 }
 

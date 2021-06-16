@@ -1,6 +1,7 @@
 #ifndef __UTILITARIO_H
 #define __UTILITARIO_H
 
+#include "doublyLinkedList.h"
 
 /*
 Verifica se um ponto é interno ao circulo
@@ -70,5 +71,12 @@ PRE: DoublyLinkedList list e char* info
 POS: 1 (true)/ 0 (false) 
 */
 int stringInDoublyLinkedList(DoublyLinkedList list, char* info);
+
+/*
+Cria uma nova lista com os elementos do inicio no fim e vice-versa
+PRE: Variável DoublyLinkedList
+POS: Variável DoublyLinkedList reversa
+*/
+DoublyLinkedList reverseDoublyLinkedList(DoublyLinkedList list);
 
 #endif

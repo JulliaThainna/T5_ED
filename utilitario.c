@@ -109,3 +109,11 @@ int stringInDoublyLinkedList(DoublyLinkedList list, char* info){
     }
     return 0;
 }
+
+DoublyLinkedList reverseDoublyLinkedList(DoublyLinkedList list){
+    DoublyLinkedList reverseList = create();
+    for(Node node = getLast(list); node != NULL; node = getPrevious(node)){
+        insert(reverseList, getInfo(node));
+    }
+    return reverseList;
+}
