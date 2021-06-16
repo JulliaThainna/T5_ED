@@ -154,7 +154,7 @@ int main(int argc, char *argv[]){
     concatenaCaminhos(dirEntrada, arqGeo, &dirGeo);
     readGeo(listas, dirGeo, cores);
 
-    Graph graph = createGraph();
+    Graph graph = NULL;
 
     //Define QuadTrees
     QuadTree quadTrees[13];
@@ -183,6 +183,7 @@ int main(int argc, char *argv[]){
         }
         if(arqVia != NULL){
             //Lê os comandos do Via
+            graph = createGraph();
             concatenaCaminhos(dirEntrada, arqVia, &dirVia);
             readVia(graph, dirVia);
         }
