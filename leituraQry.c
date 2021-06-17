@@ -52,7 +52,7 @@ void readQry(QuadTree *qt, HashTable *ht, Graph graph, char *dirQry, char *dirTx
     for(int i = 0; i < 11; i++){
         registradores[i] = criaPoint(-1, -1);
     }
-    char j[100], k[100], comando[100], cb[100], cp[100], cep[100], face, t, sfx[100], cpf[100], cnpj[100], compl[100], tp[100], reg[100], reg1[100], reg2[100], cmc[100], cmr[100], id[100], pathPInt[200], pathPbInt[200];
+    char j[100], k[100], comando[100], cb[100], cp[100], cep[100], face, t, sfx[100], cpf[100], cnpj[100], compl[100], tp[100], reg[100], reg1[100], reg2[100], cmc[100], cmr[100], id[100], pathPInt[200] = "-", pathPbInt[200] = "-";
     int casosCovid = 0, n = 0, num = 0, interno = 0, sobrepoe = 0, max = 0, idPInt = 0, idPbInt = 0;
     float x = 0, y = 0, w = 0, h = 0, r = 0, centroDeMassaX = 0, centroDeMassaY = 0;
 

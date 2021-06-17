@@ -144,6 +144,12 @@ Graph ccv(Graph graphVia, char* sfx, char* dirSaida, char* nomeGeoSemExtensao, c
 
 char* pInt(QuadTree* qt, Graph graph, Point* registradores, char* sfx, char* r1, char* r2, char* cmc, char* cmr, char* nomeGeoSemExtensao, char* nomeQrySemExtensao, char* dirSaida, int idPInt, char* pathPIntHifen){
 
+    if(strcmp(sfx, "-") != 0){
+        FILE* confirmaFechaSvg = fopen(pathPIntHifen, "a+");
+        fprintf(confirmaFechaSvg, "</svg>");
+        fclose(confirmaFechaSvg);
+    }
+
     //Pega os pontos
     int indice1 = indiceRegistrador(r1);
     int indice2 = indiceRegistrador(r2);
@@ -228,21 +234,28 @@ char* pInt(QuadTree* qt, Graph graph, Point* registradores, char* sfx, char* r1,
      }
 
     Path pathCmc = criaPath(graph, pInicial, pFinal, listCmc, distTotal, 6, cmc, idPInt);
-    Path pathCmr = criaPath(graph, pInicial, pFinal, listVm, velocidadeTotal, 6, cmr, idPInt);
+    Path pathCmr = criaPath(graph, pInicial, pFinal, listVm, velocidadeTotal, 6, cmr, idPInt + 1);
     desenhaPathSvg(pathCmc, fileSvgGeo);
     desenhaPathSvg(pathCmr, fileSvgGeo);
-
-    if(strcmp(sfx, "-") == 0){
-        fprintf(fileSvgGeo, "\n</svg>");
-    }
     
     fclose(fileSvgGeo);
 
-    return pathPIntSfx;
+    if(strcmp(sfx, "-") == 0){
+        return pathPIntHifen;
+    }
+    else{
+        return pathPIntSfx;
+    }
 }
 
 
 char* pbInt(QuadTree* qt, Graph graph, Point* registradores, char* sfx, char* r1, char* r2, char* cmc, char* nomeGeoSemExtensao, char* nomeQrySemExtensao, char* dirSaida, int idPbInt, char* pathPbIntHifen){
+
+    if(strcmp(sfx, "-") != 0){
+        FILE* confirmaFechaSvg = fopen(pathPbIntHifen, "a+");
+        fprintf(confirmaFechaSvg, "</svg>");
+        fclose(confirmaFechaSvg);
+    }
 
     //Pega os pontos
     int indice1 = indiceRegistrador(r1);
@@ -283,16 +296,16 @@ char* pbInt(QuadTree* qt, Graph graph, Point* registradores, char* sfx, char* r1
     FILE* fileSvgGeo = NULL;
 
     //Pra retornar o caminho do FILE se p? TEVE SUFIXO
-    char* pathPIntSfx = NULL;
+    char* pathPbIntSfx = NULL;
     char* nomeGeoQry = NULL;
     char* nomeGeoQrySfx = NULL;
     concatenaNomeGeoQry(nomeGeoSemExtensao, nomeQrySemExtensao, "", &nomeGeoQry);
     concatenaNomeGeoQry(nomeGeoQry, sfx, ".svg", &nomeGeoQrySfx);
-    concatenaCaminhos(dirSaida, nomeGeoQrySfx, &pathPIntSfx);
+    concatenaCaminhos(dirSaida, nomeGeoQrySfx, &pathPbIntSfx);
 
     //Se o p? teve SUFIXO
     if(strcmp(sfx, "-") != 0){
-        fileSvgGeo = fopen(pathPIntSfx, "w");
+        fileSvgGeo = fopen(pathPbIntSfx, "w");
         if(fileSvgGeo == NULL){
             return NULL;
         }
@@ -327,11 +340,12 @@ char* pbInt(QuadTree* qt, Graph graph, Point* registradores, char* sfx, char* r1
     Path pathCmc = criaPath(graph, pInicial, pFinal, listCmc, distTotal, 6, cmc, idPbInt);
     desenhaPathSvg(pathCmc, fileSvgGeo);
 
-    if(strcmp(sfx, "-") == 0){
-        fprintf(fileSvgGeo, "\n</svg>");
-    }
-    
     fclose(fileSvgGeo);
 
-    return pathPIntSfx;
+    if(strcmp(sfx, "-") == 0){
+        return pathPbIntHifen;
+    }
+    else{
+        return pathPbIntSfx;
+    }
 }
