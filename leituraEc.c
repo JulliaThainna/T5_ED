@@ -33,7 +33,7 @@ void readEc(QuadTree* qt, HashTable* ht, char* dirEc){
     printf("\nArquivo EC aberto com sucesso!");
 
         //Parametros
-        char comando[2], codt[30], descricao[30], cnpj[30], cpf[30], cep[20], face, nome[30];
+        char comando[200], codt[300], descricao[300], cnpj[300], cpf[300], cep[200], face, nome[300];
         int num;
 
     while(1){

@@ -6,4 +6,6 @@
 
 void generateDatFiles(QuadTree* qt, HashTable* ht, char* arqDatK);
 
+void loadDatFiles(QuadTree* qt, HashTable* ht, char* arqDatK);
+
 #endif

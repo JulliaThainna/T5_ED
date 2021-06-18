@@ -2,6 +2,7 @@
 #include <stdlib.h>
 #include <string.h>
 
+#include "item.h"
 #include "hashTable.h"
 #include "doublyLinkedList.h"
 
@@ -183,12 +184,14 @@ void removeHashTable(HashTable ht){
     free(hts);
 }
 
-void percorreHashTable(HashTable ht, void (*f)(void*, void*), Info extraInf){
+void percorreHashTable(HashTable ht, void (*f)(void*, void*), InfoHash extraInf){
     HashTableStruct* hts = (HashTableStruct*)ht;
     for(int i = 0; i < hts->tamHT; i++){
         Node aux = getFirst(hts->hash[i]);
         while(aux != NULL){
-            f(getInfo(aux), extraInf);
+            HashDataStruct* info = getInfo(aux);
+            Item iAux = createItem(info->key, info->value);
+            f(iAux, extraInf);
             aux = getNext(aux);
         }
     }

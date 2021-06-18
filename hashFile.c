@@ -249,7 +249,7 @@ void dumpFileHF(Hashfile hf, Info F, PrintRecord p){
                 Item item = alocarItem(h->tamCh, h->tamRec);
                 strcpy(itemGetKey(item), itemGetKey(balde.itens[j]));
                 memcpy(itemGetValue(item), itemGetValue(balde.itens[j]), h->tamRec);
-                p(F, item);
+                p(item, F);
             }
             if(balde.next == -1){
                 break;
@@ -263,4 +263,8 @@ void dumpFileHF(Hashfile hf, Info F, PrintRecord p){
     //Desaloca balde e fecha o arquivo
     desalocarBalde(balde, h->numRPB);
     fclose(file);
+}
+
+void fcloseHF(Hashfile hf){
+    free(hf);
 }

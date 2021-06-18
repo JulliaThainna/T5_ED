@@ -51,4 +51,7 @@ void removeHashTable(HashTable ht);
 */
 int hashFunc(char *key, int tamHT);
 
+
+void percorreHashTable(HashTable ht, void (*f)(void*, void*), InfoHash extraInf);
+
 #endif

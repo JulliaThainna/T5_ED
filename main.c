@@ -129,13 +129,13 @@ int main(int argc, char *argv[]){
             concatenaCaminhos(dirEntrada, arqPm, &dirPm);
             readPm(quadTrees, hashTables, dirPm);
         }
-        // TODO: LoadDatFiles
         if(arqVia != NULL){
             //Lê os comandos do Via
             graph = createGraph();
             concatenaCaminhos(dirEntrada, arqVia, &dirVia);
             readVia(graph, dirVia);
         }
+        loadDatFiles(quadTrees, hashTables, arqDatU);
         //Comando para criar o caminho que será utilizado para abrir o .qry
         concatenaCaminhos(dirEntrada, arqQry, &dirQry);
         //Me retorna o nome do arquivo geo sem extensão (utilizado mais tarde no nome do svg)

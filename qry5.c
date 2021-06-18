@@ -234,9 +234,7 @@ char* pInt(QuadTree* qt, Graph graph, Point* registradores, char* sfx, char* r1,
     desenhaPathSvg(pathCmr, fileSvgGeo);
 
     fclose(fileSvgGeo);
-    
     return pathPIntSfx;
-
 }
 
 
