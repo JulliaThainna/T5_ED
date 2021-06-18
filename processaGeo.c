@@ -90,6 +90,9 @@ QuadTree DoublyLinkedListToQuadTree(DoublyLinkedList l, QuadTree qt, Point (*get
             //Remove a lista, porém sem desalocar as infos, pois eles estão na stack agora
             removeList(conHull, 0);
         }
+        else{
+            break;
+        }
     }
 
     //Caso tenha sobrado mais elementos na lista que não se encaixaram no convex hull (esse elementos podem ser no máximo 3) adiciona eles agora na stack
