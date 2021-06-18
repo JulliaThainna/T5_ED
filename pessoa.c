@@ -83,3 +83,7 @@ char* pessoaGetNascimento(Pessoa pessoa){
     return p->dataNascimento;
 
 }
+
+int pessoaGetSize(){
+    return sizeof(PessoaStruct);
+}

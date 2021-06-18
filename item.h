@@ -4,7 +4,7 @@
 #include "doublyLinkedList.h"
 
 typedef void* Item;
-Item createItem(char chave[], Info valor);
+Item createItem(char* chave, Info valor);
 Item alocarItem(int tamCh, int tamRec);
 char* itemGetKey(Item item);
 Info itemGetValue(Item item);

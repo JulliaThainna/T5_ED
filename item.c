@@ -10,7 +10,7 @@ typedef struct{
     Info valor;
 }ItemStruct;
 
-Item createItem(char chave[], Info valor){
+Item createItem(char* chave, Info valor){
     ItemStruct* i = malloc(sizeof(ItemStruct));
     i->chave = malloc(sizeof(char) * (strlen(chave) + 1));
     strcpy(i->chave,chave);

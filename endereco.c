@@ -112,4 +112,6 @@ void enderecoSwap(Endereco e1, Endereco e2){
     *b = temp;  
 }
 
-
+int enderecoGetSize(){
+    return sizeof(EnderecoStruct);
+}

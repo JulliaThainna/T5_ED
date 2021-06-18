@@ -33,4 +33,6 @@ int estabelecimentoGetNum(Estabelecimento estabelecimento);
 */
 void estabelecimentoSwap(Estabelecimento e1, Estabelecimento e2);
 
+//Retorna o tamanho do estabelecimento em bytes
+int estabelecimentoGetSize();
 #endif

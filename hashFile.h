@@ -13,6 +13,7 @@
 
 #include <stdio.h>
 #include "hashTable.h"
+#include "doublyLinkedList.h"
 
 typedef void *Hashfile;
 typedef void (*PrintRecord)(void *, void *);

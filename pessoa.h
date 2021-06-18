@@ -32,4 +32,7 @@ char* pessoaGetSobrenome(Pessoa pessoa);
 char pessoaGetSexo(Pessoa pessoa);
 char* pessoaGetNascimento(Pessoa pessoa);
 
+
+int pessoaGetSize();
+
 #endif

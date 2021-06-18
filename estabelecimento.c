@@ -98,3 +98,7 @@ void estabelecimentoSwap(Estabelecimento e1, Estabelecimento e2){
     *a = *b;  
     *b = temp;  
 }
+
+int estabelecimentoGetSize(){
+    return sizeof(EstabelecimentoStruct);
+}

@@ -6,6 +6,7 @@
 #include "quadTree.h"
 #include "hashTable.h"
 #include "graph.h"
+#include "trataString.h"
 
 #include "linha.h"
 #include "retangulo.h"
@@ -52,7 +53,8 @@ void readQry(QuadTree *qt, HashTable *ht, Graph graph, char *dirQry, char *dirTx
     for(int i = 0; i < 11; i++){
         registradores[i] = criaPoint(-1, -1);
     }
-    char j[100], k[100], comando[100], cb[100], cp[100], cep[100], face, t, sfx[100], cpf[100], cnpj[100], compl[100], tp[100], reg[100], reg1[100], reg2[100], cmc[100], cmr[100], id[100], pathPInt[200] = "-", pathPbInt[200] = "-";
+    char j[100], k[100], comando[100], cb[100], cp[100], cep[100], face, t, sfxAnterior[100], sfx[100], cpf[100], cnpj[100], compl[100], tp[100];
+    char reg[100], reg1[100], reg2[100], cmc[100], cmr[100], id[100], pathPInt[200]; //pathPbInt[200];
     int casosCovid = 0, n = 0, num = 0, interno = 0, sobrepoe = 0, max = 0, idPInt = 0, idPbInt = 0;
     float x = 0, y = 0, w = 0, h = 0, r = 0, centroDeMassaX = 0, centroDeMassaY = 0;
 
@@ -227,7 +229,13 @@ void readQry(QuadTree *qt, HashTable *ht, Graph graph, char *dirQry, char *dirTx
         if(strcmp(comando, "p?") == 0){
             fscanf(fileQry, "%s %s %s %s %s", sfx, reg1, reg2, cmc, cmr);
             if(graph != NULL){
-                strcpy(pathPInt, pInt(qt, graph, registradores, sfx, reg1, reg2, cmc, cmr, nomeGeoSemExtensao, nomeQrySemExtensao, dirSaida, idPInt, pathPInt));
+                if(strcmp(sfx, "-") == 0){
+                   strcpy(pathPInt, pInt(qt, graph, registradores, sfx, reg1, reg2, cmc, cmr, nomeGeoSemExtensao, nomeQrySemExtensao, dirSaida, idPInt, pathPInt));
+                }
+                else{
+                    strcpy(pathPInt, pInt(qt, graph, registradores, sfx, reg1, reg2, cmc, cmr, nomeGeoSemExtensao, nomeQrySemExtensao, dirSaida, idPInt, pathPInt));
+                    strcpy(sfxAnterior, sfx);
+                }
                 idPInt += 2;
             }
         }
@@ -239,15 +247,25 @@ void readQry(QuadTree *qt, HashTable *ht, Graph graph, char *dirQry, char *dirTx
             fscanf(fileQry, "%s %s %s %s %s", sfx, reg1, reg2, cmc, cmr);
             //TODO: sp?
         }
-        if(strcmp(comando, "pb?") == 0){
-            fscanf(fileQry, "%s %s %s %s", sfx, reg1, reg2, cmc);
-            if(graphCiclovia != NULL){
-                strcpy(pathPbInt, pInt(qt, graphCiclovia, registradores, sfx, reg1, reg2, cmc, cmr, nomeGeoSemExtensao, nomeQrySemExtensao, dirSaida, idPbInt, pathPbInt));
-                idPbInt += 2;
-            }
-        }
+        // if(strcmp(comando, "pb?") == 0){
+        //     fscanf(fileQry, "%s %s %s %s", sfx, reg1, reg2, cmc);
+        //     if(graphCiclovia != NULL){
+        //         strcpy(pathPbInt, pInt(qt, graphCiclovia, registradores, sfx, reg1, reg2, cmc, cmr, nomeGeoSemExtensao, nomeQrySemExtensao, dirSaida, idPbInt, pathPbInt));
+        //         idPbInt += 2;
+        //     }
+        // }
     }
 
+    char* pathPIntSfx = NULL;
+    char* nomeGeoQry = NULL;
+    char* nomeGeoQrySfx = NULL;
+    concatenaNomeGeoQry(nomeGeoSemExtensao, nomeQrySemExtensao, "", &nomeGeoQry);
+    concatenaNomeGeoQry(nomeGeoQry, sfxAnterior, ".svg", &nomeGeoQrySfx);
+    concatenaCaminhos(dirSaida, nomeGeoQrySfx, &pathPIntSfx);
+    FILE* filePInt = fopen(pathPIntSfx, "a");
+    fprintf(filePInt, "\n</svg>");
+
+    fclose(filePInt);
     fclose(fileTxt);
     fclose(fileQry);
 }

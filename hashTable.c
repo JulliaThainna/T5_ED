@@ -182,3 +182,14 @@ void removeHashTable(HashTable ht){
     free(hts->hash);
     free(hts);
 }
+
+void percorreHashTable(HashTable ht, void (*f)(void*, void*), Info extraInf){
+    HashTableStruct* hts = (HashTableStruct*)ht;
+    for(int i = 0; i < hts->tamHT; i++){
+        Node aux = getFirst(hts->hash[i]);
+        while(aux != NULL){
+            f(getInfo(aux), extraInf);
+            aux = getNext(aux);
+        }
+    }
+}

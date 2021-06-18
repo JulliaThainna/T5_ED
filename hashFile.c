@@ -249,7 +249,7 @@ void dumpFileHF(Hashfile hf, Info F, PrintRecord p){
                 Item item = alocarItem(h->tamCh, h->tamRec);
                 strcpy(itemGetKey(item), itemGetKey(balde.itens[j]));
                 memcpy(itemGetValue(item), itemGetValue(balde.itens[j]), h->tamRec);
-                p(item, F);
+                p(F, item);
             }
             if(balde.next == -1){
                 break;

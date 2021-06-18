@@ -13,6 +13,7 @@
 #include "utilitario.h"
 #include "path.h"
 
+
 #include "endereco.h"
 #include "point.h"
 #include "linha.h"
@@ -143,13 +144,7 @@ Graph ccv(Graph graphVia, char* sfx, char* dirSaida, char* nomeGeoSemExtensao, c
 }
 
 char* pInt(QuadTree* qt, Graph graph, Point* registradores, char* sfx, char* r1, char* r2, char* cmc, char* cmr, char* nomeGeoSemExtensao, char* nomeQrySemExtensao, char* dirSaida, int idPInt, char* pathPIntHifen){
-
-    if(strcmp(sfx, "-") != 0){
-        FILE* confirmaFechaSvg = fopen(pathPIntHifen, "a+");
-        fprintf(confirmaFechaSvg, "</svg>");
-        fclose(confirmaFechaSvg);
-    }
-
+  
     //Pega os pontos
     int indice1 = indiceRegistrador(r1);
     int indice2 = indiceRegistrador(r2);
@@ -224,38 +219,28 @@ char* pInt(QuadTree* qt, Graph graph, Point* registradores, char* sfx, char* r1,
         percorreLarguraQt(qt[SEMAFORO], semaforoDesenhaSvgGeo, fileSvgGeo);
         percorreLarguraQt(qt[RADIOBASE], radioBaseDesenhaSvgGeo, fileSvgGeo);
         percorreLarguraQt(qt[POSTOSAUDE], postoSaudeDesenhaSvgGeo, fileSvgGeo);
-        
     }
     else{ //Se p? NÃO TEVE SUFIXO
-         fileSvgGeo = fopen(pathPIntHifen, "a");
-         printf("\nAnexado em arquivo SVG anterior com sucesso!");
-
-         fseek(fileSvgGeo, -5, SEEK_CUR);
-     }
-
+        fileSvgGeo = fopen(pathPIntHifen, "a");
+        if(fileSvgGeo == NULL){
+            return NULL;
+        }
+        printf("\nAnexado em arquivo SVG anterior com sucesso!");
+    }
+    
     Path pathCmc = criaPath(graph, pInicial, pFinal, listCmc, distTotal, 6, cmc, idPInt);
-    Path pathCmr = criaPath(graph, pInicial, pFinal, listVm, velocidadeTotal, 6, cmr, idPInt + 1);
+    Path pathCmr = criaPath(graph, pInicial, pFinal, listVm, velocidadeTotal, 6, cmr, idPInt+1);
     desenhaPathSvg(pathCmc, fileSvgGeo);
     desenhaPathSvg(pathCmr, fileSvgGeo);
-    
-    fclose(fileSvgGeo);
 
-    if(strcmp(sfx, "-") == 0){
-        return pathPIntHifen;
-    }
-    else{
-        return pathPIntSfx;
-    }
+    fclose(fileSvgGeo);
+    
+    return pathPIntSfx;
+
 }
 
 
 char* pbInt(QuadTree* qt, Graph graph, Point* registradores, char* sfx, char* r1, char* r2, char* cmc, char* nomeGeoSemExtensao, char* nomeQrySemExtensao, char* dirSaida, int idPbInt, char* pathPbIntHifen){
-
-    if(strcmp(sfx, "-") != 0){
-        FILE* confirmaFechaSvg = fopen(pathPbIntHifen, "a+");
-        fprintf(confirmaFechaSvg, "</svg>");
-        fclose(confirmaFechaSvg);
-    }
 
     //Pega os pontos
     int indice1 = indiceRegistrador(r1);
@@ -296,16 +281,16 @@ char* pbInt(QuadTree* qt, Graph graph, Point* registradores, char* sfx, char* r1
     FILE* fileSvgGeo = NULL;
 
     //Pra retornar o caminho do FILE se p? TEVE SUFIXO
-    char* pathPbIntSfx = NULL;
+    char* pathPIntSfx = NULL;
     char* nomeGeoQry = NULL;
     char* nomeGeoQrySfx = NULL;
     concatenaNomeGeoQry(nomeGeoSemExtensao, nomeQrySemExtensao, "", &nomeGeoQry);
     concatenaNomeGeoQry(nomeGeoQry, sfx, ".svg", &nomeGeoQrySfx);
-    concatenaCaminhos(dirSaida, nomeGeoQrySfx, &pathPbIntSfx);
+    concatenaCaminhos(dirSaida, nomeGeoQrySfx, &pathPIntSfx);
 
     //Se o p? teve SUFIXO
     if(strcmp(sfx, "-") != 0){
-        fileSvgGeo = fopen(pathPbIntSfx, "w");
+        fileSvgGeo = fopen(pathPIntSfx, "w");
         if(fileSvgGeo == NULL){
             return NULL;
         }
@@ -328,24 +313,22 @@ char* pbInt(QuadTree* qt, Graph graph, Point* registradores, char* sfx, char* r1
         percorreLarguraQt(qt[SEMAFORO], semaforoDesenhaSvgGeo, fileSvgGeo);
         percorreLarguraQt(qt[RADIOBASE], radioBaseDesenhaSvgGeo, fileSvgGeo);
         percorreLarguraQt(qt[POSTOSAUDE], postoSaudeDesenhaSvgGeo, fileSvgGeo);
-        
+        fprintf(fileSvgGeo, "\n</svg>");
     }
     else{ //Se p? NÃO TEVE SUFIXO
          fileSvgGeo = fopen(pathPbIntHifen, "a");
-         printf("\nAnexado em arquivo SVG anterior com sucesso!");
-
-         fseek(fileSvgGeo, -5, SEEK_CUR);
+        fseek(fileSvgGeo, -7, SEEK_CUR);
+        printf("\nAnexado em arquivo SVG anterior com sucesso!");
      }
 
     Path pathCmc = criaPath(graph, pInicial, pFinal, listCmc, distTotal, 6, cmc, idPbInt);
     desenhaPathSvg(pathCmc, fileSvgGeo);
 
+        
+    fprintf(fileSvgGeo, "\n</svg>");
+
+    
     fclose(fileSvgGeo);
 
-    if(strcmp(sfx, "-") == 0){
-        return pathPbIntHifen;
-    }
-    else{
-        return pathPbIntSfx;
-    }
+    return pathPIntSfx;
 }

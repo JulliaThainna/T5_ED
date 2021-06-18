@@ -41,4 +41,7 @@ char* enderecoGetCep(Endereco endereco);
 */
 void enderecoSwap(Endereco e1, Endereco e2);
 
+//Retorna o tamanho do endereço em bytes
+int enderecoGetSize();
+
 #endif
