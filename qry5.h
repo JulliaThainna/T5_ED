@@ -64,7 +64,7 @@ percurso. Caso sufx for -, continuar usando
 o mesmo arquivo de um comando p?
 anterior.
 */
-char* pInt(QuadTree* qt, Graph graph, Point* registradores, char* sfx, char* r1, char* r2, char* cmc, char* cmr, char* nomeGeoSemExtensao, char* nomeQrySemExtensao, char* dirSaida, int idPInt, char* pathPIntHifen);
+void pInt(QuadTree* qt, Graph graph, Point* registradores, char* sfx, char* r1, char* r2, char* cmc, char* cmr, char* pathPIntSfx, int idPInt);
 
 /*
 Interditar trechos de ruas (face de quadra)
@@ -96,7 +96,8 @@ considerar a árvore geradora mínima.
 Como o percurso é por bicicleta, o cálculo deve apenas
 otimizar a distância a ser percorrida
 */
-char* pbInt(QuadTree* qt, Graph graph, Point* registradores, char* sfx, char* r1, char* r2, char* cmc, char* nomeGeoSemExtensao, char* nomeQrySemExtensao, char* dirSaida, int idPbInt, char* pathPbIntHifen);
+
+void pbInt(QuadTree* qt, Graph graph, Point* registradores, char* sfx, char* r1, char* r2, char* cmc, char* pathPbIntSfx, int idPbInt);
 
 
 #endif

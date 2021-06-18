@@ -53,9 +53,11 @@ void readQry(QuadTree *qt, HashTable *ht, Graph graph, char *dirQry, char *dirTx
     for(int i = 0; i < 11; i++){
         registradores[i] = criaPoint(-1, -1);
     }
+    DoublyLinkedList arqsPInt = create();
+    DoublyLinkedList arqsPbInt = create();
     char j[100], k[100], comando[100], cb[100], cp[100], cep[100], face, t, sfx[100], cpf[100], cnpj[100], compl[100], tp[100];
-    char reg[100], reg1[100], reg2[100], cmc[100], cmr[100], id[100]; //pathPInt[200]; //pathPbInt[200];
-    int casosCovid = 0, n = 0, num = 0, interno = 0, sobrepoe = 0, max = 0; //idPInt = 0, //idPbInt = 0;
+    char reg[100], reg1[100], reg2[100], cmc[100], cmr[100], id[100]; 
+    int casosCovid = 0, n = 0, num = 0, interno = 0, sobrepoe = 0, max = 0, idPInt = 0, idPbInt = 0;
     float x = 0, y = 0, w = 0, h = 0, r = 0, centroDeMassaX = 0, centroDeMassaY = 0;
 
     Graph graphCiclovia = NULL;
@@ -226,14 +228,23 @@ void readQry(QuadTree *qt, HashTable *ht, Graph graph, char *dirQry, char *dirTx
             fscanf(fileQry, "%s", sfx);
             graphCiclovia = ccv(graph, sfx, dirSaida, nomeGeoSemExtensao, nomeQrySemExtensao);
         }
-        // if(strcmp(comando, "p?") == 0){
-        //     printf("aq");
-        //     fscanf(fileQry, "%s %s %s %s %s", sfx, reg1, reg2, cmc, cmr);
-        //     strcpy(pathPInt, pInt(qt, graph, registradores, sfx, reg1, reg2, cmc, cmr, nomeGeoSemExtensao, nomeQrySemExtensao, dirSaida, idPInt, pathPInt));
-        //     idPInt += 2;
-
-        //     fprintf(filePInfo, "</svg>");
-        // }
+        if(strcmp(comando, "p?") == 0){
+            fscanf(fileQry, "%s %s %s %s %s", sfx, reg1, reg2, cmc, cmr);
+            if(strcmp(sfx, "-") != 0){
+                char* pathPIntSfx = NULL;
+                char* nomeGeoQry = NULL;
+                char* nomeGeoQrySfx = NULL;
+                concatenaNomeGeoQry(nomeGeoSemExtensao, nomeQrySemExtensao, "", &nomeGeoQry);
+                concatenaNomeGeoQry(nomeGeoQry, sfx, ".svg", &nomeGeoQrySfx);
+                concatenaCaminhos(dirSaida, nomeGeoQrySfx, &pathPIntSfx);
+                insert(arqsPInt, pathPIntSfx);
+                pInt(qt, graph, registradores, sfx, reg1, reg2, cmc, cmr, pathPIntSfx, idPInt);
+            }
+            else{
+                pInt(qt, graph, registradores, sfx, reg1, reg2, cmc, cmr, getInfo(getLast(arqsPInt)), idPInt);
+            }
+            idPInt += 2;
+        }
         if(strcmp(comando, "bf") == 0){
             fscanf(fileQry, "%d", &max);
             //TODO: bf?
@@ -242,15 +253,50 @@ void readQry(QuadTree *qt, HashTable *ht, Graph graph, char *dirQry, char *dirTx
             fscanf(fileQry, "%s %s %s %s %s", sfx, reg1, reg2, cmc, cmr);
             //TODO: sp?
         }
-        // if(strcmp(comando, "pb?") == 0){
-        //     fscanf(fileQry, "%s %s %s %s", sfx, reg1, reg2, cmc);
-        //     if(graphCiclovia != NULL){
-        //         strcpy(pathPbInt, pInt(qt, graphCiclovia, registradores, sfx, reg1, reg2, cmc, cmr, nomeGeoSemExtensao, nomeQrySemExtensao, dirSaida, idPbInt, pathPbInt));
-        //         idPbInt += 2;
-        //     }
-        // }
+        if(strcmp(comando, "pb?") == 0){
+            fscanf(fileQry, "%s %s %s %s", sfx, reg1, reg2, cmc);
+            if(graphCiclovia != NULL){
+                if(strcmp(sfx, "-") != 0){
+                    char* pathPbIntSfx = NULL;
+                    char* nomeGeoQry = NULL;
+                    char* nomeGeoQrySfx = NULL;
+                    concatenaNomeGeoQry(nomeGeoSemExtensao, nomeQrySemExtensao, "", &nomeGeoQry);
+                    concatenaNomeGeoQry(nomeGeoQry, sfx, ".svg", &nomeGeoQrySfx);
+                    concatenaCaminhos(dirSaida, nomeGeoQrySfx, &pathPbIntSfx);
+                    insert(arqsPInt, pathPbIntSfx);
+                    
+                    pbInt(qt, graphCiclovia, registradores, sfx, reg1, reg2, cmc, pathPbIntSfx, idPbInt);
+                }
+                else{
+                    pbInt(qt, graphCiclovia, registradores, sfx, reg1, reg2, cmc, getInfo(getLast(arqsPInt)), idPbInt);
+                }
+                idPbInt += 1;
+            }
+        }
+    }
+    
+    FILE* fileArqsPInt = NULL;
+    for(Node node = getFirst(arqsPInt); node != NULL; node = getNext(node)){
+        fileArqsPInt = fopen(getInfo(node), "a");
+        if(fileArqsPInt == NULL){
+            continue;
+        }
+        fprintf(fileArqsPInt, "\n</svg>");
+        fclose(fileArqsPInt);
     }
 
+    FILE* fileArqsPbInt = NULL;
+    for(Node node = getFirst(arqsPbInt); node != NULL; node = getNext(node)){
+        fileArqsPbInt = fopen(getInfo(node), "a");
+        if(fileArqsPbInt == NULL){
+            continue;
+        }
+        fprintf(fileArqsPbInt, "\n</svg>");
+        fclose(fileArqsPbInt);
+    }
+
+    removeList(arqsPInt, 1);
+    removeList(arqsPbInt, 1);
     fclose(fileTxt);
     fclose(fileQry);
 }

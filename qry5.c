@@ -143,7 +143,7 @@ Graph ccv(Graph graphVia, char* sfx, char* dirSaida, char* nomeGeoSemExtensao, c
     return graphCiclovia;
 }
 
-char* pInt(QuadTree* qt, Graph graph, Point* registradores, char* sfx, char* r1, char* r2, char* cmc, char* cmr, char* nomeGeoSemExtensao, char* nomeQrySemExtensao, char* dirSaida, int idPInt, char* pathPIntHifen){
+void pInt(QuadTree* qt, Graph graph, Point* registradores, char* sfx, char* r1, char* r2, char* cmc, char* cmr, char* pathPIntSfx, int idPInt){
   
     //Pega os pontos
     int indice1 = indiceRegistrador(r1);
@@ -179,26 +179,15 @@ char* pInt(QuadTree* qt, Graph graph, Point* registradores, char* sfx, char* r1,
     // TODO: Fazer verificação se vertice existe pelo amor de deus
 
     DoublyLinkedList listCmc = dijkstraAlgorithm(graph, nomeVI, nomeVF, &distTotal, arestaGetCmp);
-    DoublyLinkedList listVm = dijkstraAlgorithm(graph, nomeVI, nomeVF, &velocidadeTotal, arestaGetVm);
-
-
-    //Organizar nome do arquivo
+    DoublyLinkedList listVm = dijkstraAlgorithm(graph, nomeVI, nomeVF, &velocidadeTotal, arestaGetTempo);
 
     FILE* fileSvgGeo = NULL;
-
-    //Pra retornar o caminho do FILE se p? TEVE SUFIXO
-    char* pathPIntSfx = NULL;
-    char* nomeGeoQry = NULL;
-    char* nomeGeoQrySfx = NULL;
-    concatenaNomeGeoQry(nomeGeoSemExtensao, nomeQrySemExtensao, "", &nomeGeoQry);
-    concatenaNomeGeoQry(nomeGeoQry, sfx, ".svg", &nomeGeoQrySfx);
-    concatenaCaminhos(dirSaida, nomeGeoQrySfx, &pathPIntSfx);
 
     //Se o p? teve SUFIXO
     if(strcmp(sfx, "-") != 0){
         fileSvgGeo = fopen(pathPIntSfx, "w");
         if(fileSvgGeo == NULL){
-            return NULL;
+            return;
         }
         printf("\nArquivo SVG-%s aberto com sucesso!", sfx);
         //Imprime o geo
@@ -221,9 +210,9 @@ char* pInt(QuadTree* qt, Graph graph, Point* registradores, char* sfx, char* r1,
         percorreLarguraQt(qt[POSTOSAUDE], postoSaudeDesenhaSvgGeo, fileSvgGeo);
     }
     else{ //Se p? NÃO TEVE SUFIXO
-        fileSvgGeo = fopen(pathPIntHifen, "a");
+        fileSvgGeo = fopen(pathPIntSfx, "a");
         if(fileSvgGeo == NULL){
-            return NULL;
+            return;
         }
         printf("\nAnexado em arquivo SVG anterior com sucesso!");
     }
@@ -234,12 +223,10 @@ char* pInt(QuadTree* qt, Graph graph, Point* registradores, char* sfx, char* r1,
     desenhaPathSvg(pathCmr, fileSvgGeo);
 
     fclose(fileSvgGeo);
-    return pathPIntSfx;
 }
 
 
-char* pbInt(QuadTree* qt, Graph graph, Point* registradores, char* sfx, char* r1, char* r2, char* cmc, char* nomeGeoSemExtensao, char* nomeQrySemExtensao, char* dirSaida, int idPbInt, char* pathPbIntHifen){
-
+void pbInt(QuadTree* qt, Graph graph, Point* registradores, char* sfx, char* r1, char* r2, char* cmc, char* pathPbIntSfx, int idPbInt){
     //Pega os pontos
     int indice1 = indiceRegistrador(r1);
     int indice2 = indiceRegistrador(r2);
@@ -274,23 +261,12 @@ char* pbInt(QuadTree* qt, Graph graph, Point* registradores, char* sfx, char* r1
 
     DoublyLinkedList listCmc = dijkstraAlgorithm(graph, nomeVI, nomeVF, &distTotal, arestaGetCmp);
 
-    //Organizar nome do arquivo
-
     FILE* fileSvgGeo = NULL;
 
-    //Pra retornar o caminho do FILE se p? TEVE SUFIXO
-    char* pathPIntSfx = NULL;
-    char* nomeGeoQry = NULL;
-    char* nomeGeoQrySfx = NULL;
-    concatenaNomeGeoQry(nomeGeoSemExtensao, nomeQrySemExtensao, "", &nomeGeoQry);
-    concatenaNomeGeoQry(nomeGeoQry, sfx, ".svg", &nomeGeoQrySfx);
-    concatenaCaminhos(dirSaida, nomeGeoQrySfx, &pathPIntSfx);
-
-    //Se o p? teve SUFIXO
-    if(strcmp(sfx, "-") != 0){
-        fileSvgGeo = fopen(pathPIntSfx, "w");
+    if(strcmp(sfx, "-") != 0){ //Se o p? teve SUFIXO
+        fileSvgGeo = fopen(pathPbIntSfx, "w");
         if(fileSvgGeo == NULL){
-            return NULL;
+            return;
         }
         printf("\nArquivo SVG-%s aberto com sucesso!", sfx);
         //Imprime o geo
@@ -311,22 +287,17 @@ char* pbInt(QuadTree* qt, Graph graph, Point* registradores, char* sfx, char* r1
         percorreLarguraQt(qt[SEMAFORO], semaforoDesenhaSvgGeo, fileSvgGeo);
         percorreLarguraQt(qt[RADIOBASE], radioBaseDesenhaSvgGeo, fileSvgGeo);
         percorreLarguraQt(qt[POSTOSAUDE], postoSaudeDesenhaSvgGeo, fileSvgGeo);
-        fprintf(fileSvgGeo, "\n</svg>");
     }
     else{ //Se p? NÃO TEVE SUFIXO
-         fileSvgGeo = fopen(pathPbIntHifen, "a");
-        fseek(fileSvgGeo, -7, SEEK_CUR);
+        fileSvgGeo = fopen(pathPbIntSfx, "a");
+        if(fileSvgGeo == NULL){
+            return;
+        }
         printf("\nAnexado em arquivo SVG anterior com sucesso!");
      }
 
     Path pathCmc = criaPath(graph, pInicial, pFinal, listCmc, distTotal, 6, cmc, idPbInt);
     desenhaPathSvg(pathCmc, fileSvgGeo);
 
-        
-    fprintf(fileSvgGeo, "\n</svg>");
-
-    
     fclose(fileSvgGeo);
-
-    return pathPIntSfx;
 }
