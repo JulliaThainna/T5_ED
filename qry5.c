@@ -149,11 +149,13 @@ void pInt(QuadTree* qt, Graph graph, Point* registradores, char* sfx, char* r1, 
     //Pega os pontos
     int indice1 = indiceRegistrador(r1);
     int indice2 = indiceRegistrador(r2);
-
+                                                                                                
     Point pInicial = registradores[indice1];
     Point pFinal = registradores[indice2];
 
-    //TODO: Fazer verificação
+    if(getPointX(pInicial) == -1 || getPointY(pInicial) == -1 || getPointX(pFinal) == -1 || getPointY(pFinal) == -1 ){
+        return;
+    }
 
     //Define a menor distancia até agora com a distancia dos pontos com o primeiro vertice
     float menorDistP1 = distanciaEntrePontos(getPointX(pInicial), getPointY(pInicial), verticeGetX(graphGetVertice(getInfo(getFirst(graph)))), verticeGetY(graphGetVertice(getInfo(getFirst(graph)))));
@@ -176,8 +178,6 @@ void pInt(QuadTree* qt, Graph graph, Point* registradores, char* sfx, char* r1, 
 
     float distTotal = 0;
     float velocidadeTotal = 0;
-
-    // TODO: Fazer verificação se vertice existe pelo amor de deus
 
     DoublyLinkedList listCmc = dijkstraAlgorithm(graph, nomeVI, nomeVF, &distTotal, arestaGetCmp);
     DoublyLinkedList listVm = dijkstraAlgorithm(graph, nomeVI, nomeVF, &velocidadeTotal, arestaGetTempo);
@@ -235,7 +235,9 @@ void pbInt(QuadTree* qt, Graph graph, Point* registradores, char* sfx, char* r1,
     Point pInicial = registradores[indice1];
     Point pFinal = registradores[indice2];
 
-    //TODO: Fazer verificação
+    if(getPointX(pInicial) == -1 || getPointY(pInicial) == -1 || getPointX(pFinal) == -1 || getPointY(pFinal) == -1 ){
+        return;
+    }
 
     //Define a menor distancia até agora com a distancia dos pontos com o primeiro vertice
     float menorDistP1 = distanciaEntrePontos(getPointX(pInicial), getPointY(pInicial), verticeGetX(graphGetVertice(getInfo(getFirst(graph)))), verticeGetY(graphGetVertice(getInfo(getFirst(graph)))));
@@ -257,8 +259,6 @@ void pbInt(QuadTree* qt, Graph graph, Point* registradores, char* sfx, char* r1,
     }
 
     float distTotal = 0;
-
-    // TODO: Fazer verificação se vertice existe pelo amor de deus
 
     DoublyLinkedList listCmc = dijkstraAlgorithm(graph, nomeVI, nomeVF, &distTotal, arestaGetCmp);
 
@@ -355,3 +355,4 @@ void bf(QuadTree* qt, Graph graph, int max, FILE* fileTxt){
         }
     }
 }
+

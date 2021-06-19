@@ -156,7 +156,6 @@ int main(int argc, char *argv[]){
         desenhaSvgQry(quadTrees, dirSaidaGeoQry);
     }
 
-    // TODO: Aqui ele tem que salvar tudo que precisa nos .dat
     generateDatFiles(quadTrees, hashTables, arqDatK);
 
     for(int i = 0; i < 8; i++){

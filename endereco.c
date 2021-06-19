@@ -22,7 +22,7 @@ Endereco criaEndereco(Quadra quad, char* cpf, char face, int num, char* compl){
     float y = quadraGetY(quad);
     float w = quadraGetWidth(quad);
     float h = quadraGetHeight(quad);
-    switch (toupper(face)){
+    switch (face){
     case 'N':
         x += num;
         y += h;

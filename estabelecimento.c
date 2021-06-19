@@ -24,17 +24,17 @@ Estabelecimento criaEstabelecimento(Quadra quad, char* cnpj, char* cpf, char* no
     float h = quadraGetWidth(quad);
     float w = quadraGetHeight(quad);
     switch (face){
-    case 'n':
+    case 'N':
         x += num;
         y += h;
         break;
-    case 's':
+    case 'S':
         x += num;
         break;
-    case 'l':
+    case 'L':
         y += num;
         break;
-    case 'o':
+    case 'O':
         x += w;
         y += num;
         break;

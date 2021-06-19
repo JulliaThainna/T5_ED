@@ -33,6 +33,12 @@ void readVia(Graph graph, char* dirVia){
         }
         else if(strcmp(comando, "e") == 0){
             fscanf(fileVia, "%s %s %s %s %f %f %s", i, j, ldir, lesq, &cmp, &vm, nome);
+            if(cmp <= 0){
+                cmp = 1;
+            }
+            if(vm <= 0){
+                vm = 1;
+            }
             Aresta aresta = createAresta(nome, i, j, ldir, lesq, cmp, vm);
             adicionaAresta(graph, aresta);
         }

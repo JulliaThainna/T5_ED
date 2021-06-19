@@ -1,6 +1,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include <ctype.h>
 
 #include "leituraQry.h"
 #include "quadTree.h"
@@ -71,7 +72,7 @@ void readQry(QuadTree *qt, HashTable *ht, Graph graph, char *dirQry, char *dirTx
     }
     DoublyLinkedList arqsPInt = create();
     DoublyLinkedList arqsPbInt = create();
-    char j[100], k[100], comando[100], cb[100], cp[100], cep[100], face, t, sfx[100], cpf[100], cnpj[100], compl[100], tp[100];
+    char j[100], k[100], comando[100], cb[100], cp[100], cep[100], face[100], t, sfx[100], cpf[100], cnpj[100], compl[100], tp[100];
     char reg[100], reg1[100], reg2[100], cmc[100], cmr[100], id[100]; 
     int casosCovid = 0, n = 0, num = 0, interno = 0, sobrepoe = 0, max = 0, idPInt = 0, idPbInt = 0;
     float x = 0, y = 0, w = 0, h = 0, r = 0, centroDeMassaX = 0, centroDeMassaY = 0;
@@ -171,13 +172,13 @@ void readQry(QuadTree *qt, HashTable *ht, Graph graph, char *dirQry, char *dirTx
         //T3_ED
         //cv
         if(strcmp(comando, "cv") == 0){
-            fscanf(fileQry, "%d %s %c %d", &n, cep, &face, &num);
-            cv(qt, n, cep, face, num);
+            fscanf(fileQry, "%d %s %s %d", &n, cep, face, &num);
+            cv(qt, n, cep, faceToChar(face), num);
         }
         //soc
         if(strcmp(comando, "soc") == 0){
-            fscanf(fileQry, "%d %s %c %d", &casosCovid, cep, &face, &num);
-            soc(qt, graph, casosCovid, cep, face, num, fileTxt, idPInt, fileSvgQry);
+            fscanf(fileQry, "%d %s %s %d", &casosCovid, cep, face, &num);
+            soc(qt, graph, casosCovid, cep, faceToChar(face), num, fileTxt, idPInt, fileSvgQry);
             idPInt += 100;
         }
         //ci
@@ -204,8 +205,8 @@ void readQry(QuadTree *qt, HashTable *ht, Graph graph, char *dirQry, char *dirTx
         }
         //mud
         if(strcmp(comando, "mud") == 0){
-            fscanf(fileQry, "%s %s %c %d %s", cpf, cep, &face, &num, compl );
-            mud(qt, ht, cpf, cep, face, num, compl, fileTxt);
+            fscanf(fileQry, "%s %s %s %d %s", cpf, cep, face, &num, compl );
+            mud(qt, ht, cpf, cep, faceToChar(face), num, compl, fileTxt);
         }
         //dmprbt
         if(strcmp(comando, "dmprbt") == 0){
@@ -230,8 +231,8 @@ void readQry(QuadTree *qt, HashTable *ht, Graph graph, char *dirQry, char *dirTx
             mInt(qt, ht, registradores, reg, cpf);
         }
         if(strcmp(comando, "@e?") == 0){
-            fscanf(fileQry, "%s %s %c %d", reg, cep, &face, &num);
-            eInt(qt, ht, registradores, reg, cep, face, num);
+            fscanf(fileQry, "%s %s %s %d", reg, cep, face, &num);
+            eInt(qt, ht, registradores, reg, cep, faceToChar(face), num);
         }
         if(strcmp(comando, "@g?") == 0){
             fscanf(fileQry, "%s %s", reg, id);
@@ -317,4 +318,9 @@ void readQry(QuadTree *qt, HashTable *ht, Graph graph, char *dirQry, char *dirTx
     fclose(fileTxt);
     fclose(fileQry);
     fclose(fileSvgQry);
+}
+
+char faceToChar(char* face){
+    int tam = strlen(face);
+    return toupper(face[tam-1]);
 }

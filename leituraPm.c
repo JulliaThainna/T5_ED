@@ -2,6 +2,7 @@
 #include <stdlib.h>
 #include <string.h>
 
+#include "leituraQry.h"
 #include "quadTree.h"
 #include "hashTable.h"
 #include "leituraPm.h"
@@ -32,7 +33,7 @@ void readPm(QuadTree* qt, HashTable* ht, char* dirPm){
     printf("\nArquivo PM aberto com sucesso!");
 
     //Parametros
-    char comando[200], cpf[300], nome[300], sobrenome[300], sexo, nasc[110], cep[200], face, compl[100];
+    char comando[200], cpf[300], nome[300], sobrenome[300], sexo, nasc[110], cep[200], face[100], compl[100];
     int num;
 
     while(1){
@@ -51,13 +52,13 @@ void readPm(QuadTree* qt, HashTable* ht, char* dirPm){
         }
 
         else if(strcmp(comando, "m") == 0){
-            fscanf(filePm, "%s %s %c %d %s", cpf, cep, &face, &num, compl);
+            fscanf(filePm, "%s %s %s %d %s", cpf, cep, face, &num, compl);
             Quadra qAux = getInfoByIdQt(qt[QUADRA], cep);
             if(qAux == NULL){
                 return;
             }
-            Endereco endereco = criaEndereco(qAux, cpf, face, num, compl);
-            Endereco endereco2 = criaEndereco(qAux, cpf, face, num, compl);
+            Endereco endereco = criaEndereco(qAux, cpf, faceToChar(face), num, compl);
+            Endereco endereco2 = criaEndereco(qAux, cpf, faceToChar(face), num, compl);
             insert(listaEnderecos, endereco);
             insert(listaEnderecos2, endereco2);
         }
