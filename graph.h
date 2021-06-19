@@ -123,4 +123,13 @@ int arestaRetornaSentido(Graph graph, Aresta aresta);
 Remove as arestas especificadas pela chamada, no mesmo sentido
 */
 void removeArestasBf(QuadTree* qt, Graph graph, char* cep, int flagL, int flagS);
+
+/*
+Percorre o grafo e retorna uma aresta nomeVI no vertice inicial
+e nomeVF no vertice final
+PRE: Grafo, nomeVI, nomeVF
+POS: Aresta caso encontre. NULL caso não encontre.
+*/
+Aresta graphGetArestaByVertices(Graph graph, char* nomeVI, char* nomeVF);
+
 #endif

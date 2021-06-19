@@ -423,13 +423,13 @@ Retorna 1 se a aresta estiver na vertical, 0 se a aresta estiver na horizontal e
 */
 int arestaRetornaSentido(Graph graph, Aresta aresta){
     char* nomeVI = arestaGetNomeVerticeInicial(aresta);
-    char* nomeVF = arestaGetNomeVerticeInicial(aresta);
+    char* nomeVF = arestaGetNomeVerticeFinal(aresta);
     Vertice verticeInicial = graphGetVertice(graphGetAdjascentList(graph, nomeVI));
     Vertice verticeFinal = graphGetVertice(graphGetAdjascentList(graph, nomeVF));
-    if(verticeGetX(verticeInicial) == verticeGetX(verticeInicial)){
+    if(verticeGetX(verticeInicial) == verticeGetX(verticeFinal)){
         return 1;
     }
-    else if(verticeGetY(verticeFinal) == verticeGetY(verticeFinal)){
+    else if(verticeGetY(verticeInicial) == verticeGetY(verticeFinal)){
         return 0;
     }
     return -1;
@@ -460,4 +460,22 @@ void removeArestasBf(QuadTree* qt, Graph graph, char* cep, int flagL, int flagS)
             nodeA = getNext(nodeA);
         }
     }
+}
+
+/*
+Percorre o grafo e retorna uma aresta nomeVI no vertice inicial
+e nomeVF no vertice final
+PRE: Grafo, nomeVI, nomeVF
+POS: Aresta caso encontre. NULL caso não encontre.
+*/
+Aresta graphGetArestaByVertices(Graph graph, char* nomeVI, char* nomeVF){
+    for(Node node = getFirst(graph); node != NULL; node = getNext(node)){
+        AdjascentListStruct* al = getInfo(node);
+        for(Node nodeA = getFirst(al->arestas); nodeA != NULL; nodeA = getNext(nodeA)){
+            if(strcmp(nomeVI, arestaGetNomeVerticeInicial(getInfo(nodeA))) == 0 && strcmp(nomeVF, arestaGetNomeVerticeFinal(getInfo(nodeA))) == 0){
+                return getInfo(nodeA);
+            }
+        }
+    }
+    return NULL;
 }

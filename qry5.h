@@ -8,6 +8,22 @@
 int indiceRegistrador(char* r);
 
 /*
+Verifica se a curva entre uma aresta e outra é pra esquerda ou direita
+É chamado quando a aresta inicial está na horizontal
+0 -> Esquerda
+1 -> Direita
+*/
+int descreveCurvaHorizontal(Graph graph, Aresta i, Aresta f);
+
+/*
+Verifica se a curva entre uma aresta e outra é pra esquerda ou direita
+É chamado quando a aresta inicial está na vertical
+0 -> Esquerda
+1 -> Direita
+*/
+int descreveCurvaVertical(Graph graph, Aresta i, Aresta f);
+
+/*
 Armazena no registrador r a posição
 geográfica da residência do morador de cpf
 cpf.
@@ -64,7 +80,7 @@ percurso. Caso sufx for -, continuar usando
 o mesmo arquivo de um comando p?
 anterior.
 */
-void pInt(QuadTree* qt, Graph graph, Point* registradores, char* sfx, char* r1, char* r2, char* cmc, char* cmr, char* pathPIntSfx, int idPInt);
+void pInt(QuadTree* qt, Graph graph, Point* registradores, char* sfx, char* r1, char* r2, char* cmc, char* cmr, char* pathPIntSfx, int idPInt, char* pathPIntSfxTxt);
 
 /*
 Interditar trechos de ruas (face de quadra)
@@ -98,8 +114,9 @@ Como o percurso é por bicicleta, o cálculo deve apenas
 otimizar a distância a ser percorrida
 */
 
-void pbInt(QuadTree* qt, Graph graph, Point* registradores, char* sfx, char* r1, char* r2, char* cmc, char* pathPbIntSfx, int idPbInt);
+void pbInt(QuadTree* qt, Graph graph, Point* registradores, char* sfx, char* r1, char* r2, char* cmc, char* pathPbIntSfx, int idPbInt, char* pathPbIntSfxTxt);
 
 
+void descreveTrajeto(Graph graph, DoublyLinkedList path, FILE* filetxt);
 
 #endif

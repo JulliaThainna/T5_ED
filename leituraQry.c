@@ -72,6 +72,8 @@ void readQry(QuadTree *qt, HashTable *ht, Graph graph, char *dirQry, char *dirTx
     }
     DoublyLinkedList arqsPInt = create();
     DoublyLinkedList arqsPbInt = create();
+    DoublyLinkedList arqsPIntTxt = create();
+    DoublyLinkedList arqsPbIntTxt = create();
     char j[100], k[100], comando[100], cb[100], cp[100], cep[100], face[100], t, sfx[100], cpf[100], cnpj[100], compl[100], tp[100];
     char reg[100], reg1[100], reg2[100], cmc[100], cmr[100], id[100]; 
     int casosCovid = 0, n = 0, num = 0, interno = 0, sobrepoe = 0, max = 0, idPInt = 0, idPbInt = 0;
@@ -255,11 +257,18 @@ void readQry(QuadTree *qt, HashTable *ht, Graph graph, char *dirQry, char *dirTx
                 concatenaNomeGeoQry(nomeGeoSemExtensao, nomeQrySemExtensao, "", &nomeGeoQry);
                 concatenaNomeGeoQry(nomeGeoQry, sfx, ".svg", &nomeGeoQrySfx);
                 concatenaCaminhos(dirSaida, nomeGeoQrySfx, &pathPIntSfx);
+                char* pathPIntSfxTxt = NULL;
+                char* nomeGeoQryTxt = NULL;
+                char* nomeGeoQrySfxTxt = NULL;
+                concatenaNomeGeoQry(nomeGeoSemExtensao, nomeQrySemExtensao, "", &nomeGeoQryTxt);
+                concatenaNomeGeoQry(nomeGeoQryTxt, sfx, ".txt", &nomeGeoQrySfxTxt);
+                concatenaCaminhos(dirSaida, nomeGeoQrySfxTxt, &pathPIntSfxTxt);
                 insert(arqsPInt, pathPIntSfx);
-                pInt(qt, graph, registradores, sfx, reg1, reg2, cmc, cmr, pathPIntSfx, idPInt);
+                insert(arqsPIntTxt, pathPIntSfxTxt);
+                pInt(qt, graph, registradores, sfx, reg1, reg2, cmc, cmr, pathPIntSfx, idPInt, pathPIntSfxTxt);
             }
             else{
-                pInt(qt, graph, registradores, sfx, reg1, reg2, cmc, cmr, getInfo(getLast(arqsPInt)), idPInt);
+                pInt(qt, graph, registradores, sfx, reg1, reg2, cmc, cmr, getInfo(getLast(arqsPInt)), idPInt, getInfo(getLast(arqsPIntTxt)));
             }
             idPInt += 2;
         }
@@ -281,12 +290,18 @@ void readQry(QuadTree *qt, HashTable *ht, Graph graph, char *dirQry, char *dirTx
                     concatenaNomeGeoQry(nomeGeoSemExtensao, nomeQrySemExtensao, "", &nomeGeoQry);
                     concatenaNomeGeoQry(nomeGeoQry, sfx, ".svg", &nomeGeoQrySfx);
                     concatenaCaminhos(dirSaida, nomeGeoQrySfx, &pathPbIntSfx);
-                    insert(arqsPInt, pathPbIntSfx);
-                    
-                    pbInt(qt, graphCiclovia, registradores, sfx, reg1, reg2, cmc, pathPbIntSfx, idPbInt);
+                    char* pathPbIntSfxTxt = NULL;
+                    char* nomeGeoQryTxt = NULL;
+                    char* nomeGeoQrySfxTxt = NULL;
+                    concatenaNomeGeoQry(nomeGeoSemExtensao, nomeQrySemExtensao, "", &nomeGeoQryTxt);
+                    concatenaNomeGeoQry(nomeGeoQryTxt, sfx, ".txt", &nomeGeoQrySfxTxt);
+                    concatenaCaminhos(dirSaida, nomeGeoQrySfxTxt, &pathPbIntSfxTxt);
+                    insert(arqsPbIntTxt, pathPbIntSfxTxt);
+                    insert(arqsPbIntTxt, pathPbIntSfxTxt);
+                    pbInt(qt, graphCiclovia, registradores, sfx, reg1, reg2, cmc, pathPbIntSfx, idPbInt, pathPbIntSfxTxt);
                 }
                 else{
-                    pbInt(qt, graphCiclovia, registradores, sfx, reg1, reg2, cmc, getInfo(getLast(arqsPInt)), idPbInt);
+                    pbInt(qt, graphCiclovia, registradores, sfx, reg1, reg2, cmc, getInfo(getLast(arqsPbInt)), idPbInt, getInfo(getLast(arqsPbIntTxt)));
                 }
                 idPbInt += 1;
             }
