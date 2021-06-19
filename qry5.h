@@ -76,6 +76,7 @@ SGV: desenhar um segmento de reta
 vermelho e largo ao lado da face da
 quadra, mas fora dela.
 */
+void bf(QuadTree* qt, Graph graph, int max, FILE* fileTxt);
 
 /*
 Igual a p?, mas evita toda a região com
@@ -98,6 +99,7 @@ otimizar a distância a ser percorrida
 */
 
 void pbInt(QuadTree* qt, Graph graph, Point* registradores, char* sfx, char* r1, char* r2, char* cmc, char* pathPbIntSfx, int idPbInt);
+
 
 
 #endif

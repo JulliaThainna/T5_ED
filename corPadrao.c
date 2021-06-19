@@ -5,16 +5,16 @@
 
 typedef struct corPadrao{
     //cq
-    char quadraSw[22], quadraCfill[22], quadraCstrk[22];
+    char quadraSw[220], quadraCfill[220], quadraCstrk[220];
     //ch
-    char hidranteSw[22], hidranteCfill[22], hidranteCstrk[22];
+    char hidranteSw[220], hidranteCfill[220], hidranteCstrk[220];
     //cr
-    char radioBaseSw[22], radioBaseCfill[22], radioBaseCstrk[22];
+    char radioBaseSw[220], radioBaseCfill[220], radioBaseCstrk[220];
     //cs
-    char semaforoSw[22], semaforoCfill[22], semaforoCstrk[22];
+    char semaforoSw[220], semaforoCfill[220], semaforoCstrk[220];
     //sw
-    char circuloSw[22];
-    char retanguloSw[22];
+    char circuloSw[220];
+    char retanguloSw[220];
 }CorPadraoStruct;
 
 

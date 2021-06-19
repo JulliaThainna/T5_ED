@@ -7,10 +7,10 @@
 
 typedef struct{
     int tracejado;
-    char id[10];
+    char id[100];
     Point point;
     float w, h;
-    char cb[22], cp[22], sw[22];
+    char cb[220], cp[220], sw[220];
 }RetanguloStruct;
 
 

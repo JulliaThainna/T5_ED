@@ -6,10 +6,10 @@
 #include "point.h"
 
 typedef struct{
-    char id[10];
+    char id[100];
     float r;
     Point point;
-    char cb[22], cp[22], sw[22];
+    char cb[220], cp[220], sw[220];
 }CirculoStruct;
 
 

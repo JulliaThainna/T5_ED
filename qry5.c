@@ -24,6 +24,7 @@
 #include "retangulo.h"
 #include "texto.h"
 #include "postoSaude.h"
+#include "localCasos.h"
 
 enum LISTAS{CIRCULO, RETANGULO, TEXTO, QUADRA, HIDRANTE, SEMAFORO, RADIOBASE, POSTOSAUDE, LINHA, LOCALCASOS, POLIGONO, ESTABELECIMENTO, ENDERECOS};
 enum HASHTABLE{CPF_ENDERECO, TIPO_DESCRICAO, CPF_DADOS, CEP_QUADRA};
@@ -217,8 +218,8 @@ void pInt(QuadTree* qt, Graph graph, Point* registradores, char* sfx, char* r1, 
         printf("\nAnexado em arquivo SVG anterior com sucesso!");
     }
     
-    Path pathCmc = criaPath(graph, pInicial, pFinal, listCmc, distTotal, 6, cmc, idPInt);
-    Path pathCmr = criaPath(graph, pInicial, pFinal, listVm, velocidadeTotal, 6, cmr, idPInt+1);
+    Path pathCmc = criaPath(graph, pInicial, pFinal, listCmc, distTotal, 6, cmc, idPInt, 0);
+    Path pathCmr = criaPath(graph, pInicial, pFinal, listVm, velocidadeTotal, 6, cmr, idPInt+1, 1);
     desenhaPathSvg(pathCmc, fileSvgGeo);
     desenhaPathSvg(pathCmr, fileSvgGeo);
 
@@ -296,8 +297,61 @@ void pbInt(QuadTree* qt, Graph graph, Point* registradores, char* sfx, char* r1,
         printf("\nAnexado em arquivo SVG anterior com sucesso!");
      }
 
-    Path pathCmc = criaPath(graph, pInicial, pFinal, listCmc, distTotal, 6, cmc, idPbInt);
+    Path pathCmc = criaPath(graph, pInicial, pFinal, listCmc, distTotal, 6, cmc, idPbInt, 0);
     desenhaPathSvg(pathCmc, fileSvgGeo);
 
     fclose(fileSvgGeo);
+}
+
+void insertAuxQry5(Info info, DoublyLinkedList l){
+    insert(l, info);
+}
+
+void bf(QuadTree* qt, Graph graph, int max, FILE* fileTxt){
+    fprintf(fileTxt, "\nBf max: %d", max);
+
+    //Converte a quadtree de local casos para lista de local casos
+    DoublyLinkedList localCasos = create();
+    percorreLarguraQt(qt[LOCALCASOS], insertAuxQry5, localCasos);
+
+    for(Node node = getFirst(localCasos); node != NULL; node = getNext(node)){
+        int casosNorte = 0;
+        int casosSul = 0;
+        int casosOeste = 0;
+        int casosLeste = 0;
+        LocalCasos lc1 = getInfo(node);
+        for(Node aux = getFirst(localCasos); aux != NULL; aux = getNext(aux)){
+            LocalCasos lc2 = getInfo(aux);
+            if(strcmp(localCasosGetCep(lc1), localCasosGetCep(lc2)) == 0){
+                if(toupper(localCasosGetFace(lc2)) == 'N'){
+                    casosNorte += localCasosGetN(lc2);
+                }
+                else if(toupper(localCasosGetFace(lc2)) == 'S'){
+                    casosSul += localCasosGetN(lc2);
+                }
+                else if(toupper(localCasosGetFace(lc2)) == 'O'){
+                    casosOeste += localCasosGetN(lc2);
+                }
+                else if(toupper(localCasosGetFace(lc2)) == 'L'){
+                    casosLeste += localCasosGetN(lc2);
+                }
+            }
+        }
+        if(casosNorte > max){
+            fprintf(fileTxt, "\nCEP: %s Face: N Total de Casos: %d", localCasosGetCep(lc1), casosNorte);
+            removeArestasBf(qt, graph, localCasosGetCep(lc1), 1, 0);
+        }
+        else if(casosSul > max){
+            fprintf(fileTxt, "\nCEP: %s Face: S Total de Casos: %d", localCasosGetCep(lc1), casosSul);
+            removeArestasBf(qt, graph, localCasosGetCep(lc1), 0, 0);
+        }
+        else if(casosOeste > max){
+            fprintf(fileTxt, "\nCEP: %s Face: O Total de Casos: %d", localCasosGetCep(lc1), casosOeste);
+            removeArestasBf(qt, graph, localCasosGetCep(lc1), 1, 1);
+        }
+        else if(casosLeste > max){
+            fprintf(fileTxt, "\nCEP: %s Face: L Total de Casos: %d", localCasosGetCep(lc1), casosLeste);
+            removeArestasBf(qt, graph, localCasosGetCep(lc1), 0, 1);
+        }
+    }
 }

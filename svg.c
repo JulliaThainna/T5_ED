@@ -50,20 +50,12 @@ void desenhaSvgGeo(QuadTree* qt, char* dirSaida){
 
 
 void desenhaSvgQry(QuadTree* qt, char* dirSaida){
-    char* corSombra[6] = {"#FFFF00", "#FF9955", "#FF0000", "#FF00CC", "#6600FF", "#A02C5A"}; //Comando usado para fazer a sombras das quadras no SVG do comando dd (Atualizado para T4)
+    //char* corSombra[6] = {"#FFFF00", "#FF9955", "#FF0000", "#FF00CC", "#6600FF", "#A02C5A"}; //Comando usado para fazer a sombras das quadras no SVG do comando dd (Atualizado para T4)
     FILE* fileSvgQry = NULL;
-    fileSvgQry = fopen(dirSaida, "w");
+    fileSvgQry = fopen(dirSaida, "a");
     if(!fileSvgQry){
         exit(1);
     }
-    printf("\nArquivo SVG-QRY criado com sucesso!");
-    fprintf(fileSvgQry, "<svg version=\"1.1\" baseProfile=\"full\" width=\"10000\" height=\"10000\" xmlns=\"http://www.w3.org/2000/svg\">");
-
-    fprintf(fileSvgQry, "<defs>");
-    for(int i = 0; i < 6; i++){
-        fprintf(fileSvgQry, "<filter id=\"shadow%d\">\n\t\t\t<feDropShadow dx=\"4\" dy=\"4\" stdDeviation=\"0.2\" flood-color=\"%s\"/>\n\t\t</filter>", i, corSombra[i]);
-    }
-    fprintf(fileSvgQry, "</defs>");
 
     percorreLarguraQt(qt[QUADRA], quadraDesenhaSvgQry, fileSvgQry);
     percorreLarguraQt(qt[HIDRANTE], hidranteDesenhaSvgGeo, fileSvgQry);

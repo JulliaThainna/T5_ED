@@ -6,14 +6,14 @@
 #include "quadra.h"
 
 typedef struct quadra{
-    char cep[20];
+    char cep[200];
     Point point;
     float w;
     float h;
     float dd;
-    char cb[22];
-    char cp[22];
-    char sw[22];
+    char cb[220];
+    char cp[220];
+    char sw[220];
     int arredondado;
 }QuadraStruct;
 

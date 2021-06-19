@@ -9,7 +9,7 @@
 typedef struct {
     DoublyLinkedList pontos;
     Point point;
-    char cor[22];
+    char cor[220];
 }PoligonoStruct;
 
 

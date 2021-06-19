@@ -6,11 +6,11 @@
 #include "point.h"
 
 typedef struct{
-    char id[10];
+    char id[100];
     int size;
     Point point;
     char* txt;
-    char cb[22], cp[22];
+    char cb[220], cp[220];
 }TextoStruct;
 
 

@@ -2,7 +2,7 @@
 #define __QRY3_H
 
 #include "quadTree.h"
-
+#include "graph.h"
 /*
 Foram detectados n casos de COVID-19 no endereço cep,face,num.
 PRE: informações de cep face num, qts, casos de covid
@@ -39,7 +39,7 @@ até cada um dos k postos de atendimento.
 TXT: escrever as coordenadas dos postos
 de atendimento
 */
-void soc(QuadTree* qt, int k, char* cep, char face, int num, FILE* fileTxt);
+void soc(QuadTree* qt, Graph graph, int k, char* cep, char face, int num, FILE* fileTxt, int id, FILE* fileSvgQry);
 
 /*
 Determinar a região de incidência relativa

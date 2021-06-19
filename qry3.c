@@ -15,6 +15,8 @@
 #include "circulo.h"
 #include "utilitario.h"
 #include "poligono.h"
+#include "graph.h"
+#include "path.h"
 
 enum LISTAS{CIRCULO, RETANGULO, TEXTO, QUADRA, HIDRANTE, SEMAFORO, RADIOBASE, POSTOSAUDE, LINHA, LOCALCASOS, POLIGONO};
 
@@ -55,7 +57,7 @@ void convertLocalCasosToPoint(QuadTree qt, char* cep, char face, int num, float*
     }
 }
 
-void soc(QuadTree* qt, int k, char* cep, char face, int num, FILE* fileTxt){
+void soc(QuadTree* qt, Graph graph, int k, char* cep, char face, int num, FILE* fileTxt, int id, FILE* fileSvgQry){
     fprintf(fileTxt, "\nsoc %d %s %c %d", k, cep, face, num);
 
     float cx, cy;
@@ -71,18 +73,58 @@ void soc(QuadTree* qt, int k, char* cep, char face, int num, FILE* fileTxt){
     
     shellSorting(lista, cx, cy);
 
+    //Achar qual vertice está mais próximo do cx e cy
+    Point pInicial = criaPoint(cx, cy);
+    char nomeVI[100];
+    float menorDistP1 = distanciaEntrePontos(getPointX(pInicial), getPointY(pInicial), verticeGetX(graphGetVertice(getInfo(getFirst(graph)))), verticeGetY(graphGetVertice(getInfo(getFirst(graph)))));
+    for(Node node = getFirst(graph); node != NULL; node = getNext(node)){
+        AdjascentList al = getInfo(node);
+        if(distanciaEntrePontos(getPointX(pInicial), getPointY(pInicial), verticeGetX(graphGetVertice(getInfo(node))), verticeGetY(graphGetVertice(getInfo(node)))) < menorDistP1){
+            menorDistP1 = distanciaEntrePontos(getPointX(pInicial), getPointY(pInicial), verticeGetX(graphGetVertice(getInfo(node))), verticeGetY(graphGetVertice(getInfo(node))));
+            strcpy(nomeVI, verticeGetNome(graphGetVertice(al)));
+        }
+    }
+
     //Sempre que a variavel começar no 0 nunca usa o igual
     int i = 0;
     for(Node aux = getFirst(lista); aux != NULL; aux = getNext(aux)){
+        PostoSaude ps = getInfo(aux);
         if(i < k){
-            Linha linha = criaLinha(cx, cy, postoSaudeGetX(getInfo(aux)), postoSaudeGetY(getInfo(aux)), 0, 0, "-1");
-            linhaSetTracejada(linha, 1);
-            insereQt(qt[LINHA], linhaGetP1(linha), linha);
+            /*
+                Linha linha = criaLinha(cx, cy, postoSaudeGetX(getInfo(aux)), postoSaudeGetY(getInfo(aux)), 0, 0, "-1");
+                linhaSetTracejada(linha, 1);
+                insereQt(qt[LINHA], linhaGetP1(linha), linha);
+            */
+
+            //Achar vertice mais próximo do posto de saude
+            Point pFinal = criaPoint(postoSaudeGetX(ps), postoSaudeGetY(ps));
+            char nomeVF[100];
+            
+            float menorDistP2 = distanciaEntrePontos(getPointX(pInicial), getPointY(pInicial), verticeGetX(graphGetVertice(getInfo(getFirst(graph)))), verticeGetY(graphGetVertice(getInfo(getFirst(graph)))));
+            for(Node node = getFirst(graph); node != NULL; node = getNext(node)){
+                AdjascentList al = getInfo(node);
+                if(distanciaEntrePontos(getPointX(pFinal), getPointY(pFinal), verticeGetX(graphGetVertice(getInfo(node))), verticeGetY(graphGetVertice(getInfo(node)))) < menorDistP2){
+                    menorDistP2 = distanciaEntrePontos(getPointX(pFinal), getPointY(pFinal), verticeGetX(graphGetVertice(getInfo(node))), verticeGetY(graphGetVertice(getInfo(node))));
+                    strcpy(nomeVF, verticeGetNome(graphGetVertice(al)));
+                }
+            }
+        
+            //Dijkstra do vertice mais proximo de cx e cy até o vertice mais próximo do posto
+            float cmpTotal = 0;
+            DoublyLinkedList listCmp = dijkstraAlgorithm(graph, nomeVI, nomeVF, &cmpTotal, arestaGetCmp);
+
+            //Criar path com dijkstra
+            Path pathCmp = criaPath(graph, pInicial, pFinal, listCmp, cmpTotal, 6, "blue", id+i, -1);
+            
+            //Imprimir path
+            printf("aqui");
+            desenhaPathSvg(pathCmp, fileSvgQry);
             i++;
         }
         fprintf(fileTxt, "POSTO DE SAUDE | X: %f  Y: %f", postoSaudeGetX(getInfo(aux)), postoSaudeGetY(getInfo(aux)));
     }
 
+    //Retangulo no endereço
     Retangulo retangulo = criaRetangulo("0", 0, cx, cy, 20, 20, "white", "blue", "3px");
     insereQt(qt[RETANGULO], retanguloGetPoint(retangulo), retangulo);
 

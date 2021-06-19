@@ -2,12 +2,17 @@
 #include <stdlib.h>
 #include <string.h>
 
+#include "quadTree.h"
 #include "graph.h"
 #include "hashTable.h"
 #include "doublyLinkedList.h"
 #include "aresta.h"
 #include "vertice.h"
 #include "utilitario.h"
+#include "linha.h"
+
+
+enum LISTAS{CIRCULO, RETANGULO, TEXTO, QUADRA, HIDRANTE, SEMAFORO, RADIOBASE, POSTOSAUDE, LINHA, LOCALCASOS, POLIGONO, ESTABELECIMENTO, ENDERECOS};
 
 /*Struct da lista de "vértices". Ex: 1 -> 2 -> 3*/
 /*
@@ -400,3 +405,59 @@ DoublyLinkedList dijkstraAlgorithm(Graph graph, char* nomeVI, char* nomeVF, floa
     return correctPath; 
 }
 
+/*
+Retorna 1 se o lado esquerdo for igual ao cep, 0 se o direto for. -1 se nenhum
+*/
+int arestaRetornaLado(Aresta aresta, char* cep){
+    if(strcmp(arestaGetLesq(aresta), cep) == 0){
+        return 1;
+    }
+    else if(strcmp(arestaGetLdir(aresta), cep) == 0){
+        return 0;
+    }
+    return -1;
+}
+
+/*
+Retorna 1 se a aresta estiver na vertical, 0 se a aresta estiver na horizontal e -1 se nenhum dos dois
+*/
+int arestaRetornaSentido(Graph graph, Aresta aresta){
+    char* nomeVI = arestaGetNomeVerticeInicial(aresta);
+    char* nomeVF = arestaGetNomeVerticeInicial(aresta);
+    Vertice verticeInicial = graphGetVertice(graphGetAdjascentList(graph, nomeVI));
+    Vertice verticeFinal = graphGetVertice(graphGetAdjascentList(graph, nomeVF));
+    if(verticeGetX(verticeInicial) == verticeGetX(verticeInicial)){
+        return 1;
+    }
+    else if(verticeGetY(verticeFinal) == verticeGetY(verticeFinal)){
+        return 0;
+    }
+    return -1;
+}
+
+/*
+Remove as arestas especificadas pela chamada, no mesmo sentido
+*/
+void removeArestasBf(QuadTree* qt, Graph graph, char* cep, int flagL, int flagS){
+    for(Node node = getFirst(graph); node != NULL; node = getNext(node)){
+        AdjascentListStruct* al = getInfo(node);
+        Node nodeA = getFirst(al->arestas);
+        while(nodeA != NULL){
+            Aresta aresta = getInfo(nodeA);
+            int l = arestaRetornaLado(aresta, cep);
+            int s = arestaRetornaSentido(graph, aresta);
+            
+            if(l == flagL && s == flagS){
+
+                Linha linha = criaLinha(verticeGetX(graphGetVertice(graphGetAdjascentList(graph, arestaGetNomeVerticeInicial(aresta)))), verticeGetY(graphGetVertice(graphGetAdjascentList(graph, arestaGetNomeVerticeInicial(aresta)))), verticeGetX(graphGetVertice(graphGetAdjascentList(graph, arestaGetNomeVerticeFinal(aresta)))) ,verticeGetY(graphGetVertice(graphGetAdjascentList(graph, arestaGetNomeVerticeFinal(aresta)))), 0, 0, "-1");
+                insereQt(qt[LINHA], linhaGetP1(linha), linha);
+
+                Node nodeAux = getNext(nodeA);
+                removeNode(al->arestas, nodeA, 0);
+                nodeA = nodeAux;
+                continue;
+            }
+            nodeA = getNext(nodeA);
+        }
+    }
+}

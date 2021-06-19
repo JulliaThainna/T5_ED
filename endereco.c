@@ -9,9 +9,9 @@
 
 typedef struct{
     Point point;
-    char cpf[20];
-    char cep[20];
-    char compl[20];
+    char cpf[200];
+    char cep[200];
+    char compl[200];
     char face;
     int numero;
 }EnderecoStruct;

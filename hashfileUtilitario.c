@@ -123,6 +123,8 @@ void loadDatFiles(QuadTree* qt, HashTable* ht, char* arqDatU){
         fcloseHF(hf[i]);
     }
 
-
+    hf[2] = hf[2];
+    qt[1] = qt[1];
+    ht[0] = ht[0];
 
 }

@@ -33,7 +33,7 @@ enum LISTAS{
     ENDERECOS
 };
 
-void readQry(QuadTree *qt, HashTable *ht, Graph graph, char *dirQry, char *dirTxt, char *dirSaida, char *nomeGeoSemExtensao, char *nomeQrySemExtensao){
+void readQry(QuadTree *qt, HashTable *ht, Graph graph, char *dirQry, char *dirTxt, char *dirSaida, char *nomeGeoSemExtensao, char *nomeQrySemExtensao, char* dirSaidaGeoQry){
 
     FILE *fileTxt = NULL;
     fileTxt = fopen(dirTxt, "w");
@@ -48,6 +48,22 @@ void readQry(QuadTree *qt, HashTable *ht, Graph graph, char *dirQry, char *dirTx
         exit(1);
     }
     printf("\nArquivo QRY aberto com sucesso!");
+
+    FILE* fileSvgQry = NULL;
+    fileSvgQry = fopen(dirSaidaGeoQry, "w");
+    if(!fileSvgQry){
+        exit(1);
+    }
+    printf("\nArquivo SVG-QRY criado com sucesso!");
+    fprintf(fileSvgQry, "<svg version=\"1.1\" baseProfile=\"full\" width=\"10000\" height=\"10000\" xmlns=\"http://www.w3.org/2000/svg\" xmlns:xlink=\"http://www.w3.org/1999/xlink\">");
+
+    char* corSombra[6] = {"#FFFF00", "#FF9955", "#FF0000", "#FF00CC", "#6600FF", "#A02C5A"}; //Comando usado para fazer a sombras das quadras no SVG do comando dd (Atualizado para T4)
+
+    fprintf(fileSvgQry, "<defs>");
+    for(int i = 0; i < 6; i++){
+        fprintf(fileSvgQry, "<filter id=\"shadow%d\">\n\t\t\t<feDropShadow dx=\"4\" dy=\"4\" stdDeviation=\"0.2\" flood-color=\"%s\"/>\n\t\t</filter>", i, corSombra[i]);
+    }
+    fprintf(fileSvgQry, "</defs>");
 
     Point registradores[11];
     for(int i = 0; i < 11; i++){
@@ -161,7 +177,8 @@ void readQry(QuadTree *qt, HashTable *ht, Graph graph, char *dirQry, char *dirTx
         //soc
         if(strcmp(comando, "soc") == 0){
             fscanf(fileQry, "%d %s %c %d", &casosCovid, cep, &face, &num);
-            soc(qt, casosCovid, cep, face, num, fileTxt);
+            soc(qt, graph, casosCovid, cep, face, num, fileTxt, idPInt, fileSvgQry);
+            idPInt += 100;
         }
         //ci
         if(strcmp(comando, "ci") == 0){
@@ -247,7 +264,7 @@ void readQry(QuadTree *qt, HashTable *ht, Graph graph, char *dirQry, char *dirTx
         }
         if(strcmp(comando, "bf") == 0){
             fscanf(fileQry, "%d", &max);
-            //TODO: bf?
+            bf(qt, graph, max, fileTxt);
         }
         if(strcmp(comando, "sp?") == 0){
             fscanf(fileQry, "%s %s %s %s %s", sfx, reg1, reg2, cmc, cmr);
@@ -299,4 +316,5 @@ void readQry(QuadTree *qt, HashTable *ht, Graph graph, char *dirQry, char *dirTx
     removeList(arqsPbInt, 1);
     fclose(fileTxt);
     fclose(fileQry);
+    fclose(fileSvgQry);
 }

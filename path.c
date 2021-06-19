@@ -17,9 +17,10 @@ typedef struct{
     float duration;
     char cor[100];
     int idPInt;
+    int flag;
 }PathStruct;
 
-Path criaPath(Graph graph, Point pInicial, Point pFinal, DoublyLinkedList nomesVerticesList, float cmp, float duration, char* cor, int idPInt){
+Path criaPath(Graph graph, Point pInicial, Point pFinal, DoublyLinkedList nomesVerticesList, float cmp, float duration, char* cor, int idPInt, int flag){
     PathStruct* ps = (PathStruct*) malloc(sizeof(PathStruct));
     ps->graphBase = graph;
     ps->pInicial = criaPoint(getPointX(pInicial), getPointY(pInicial));
@@ -28,6 +29,7 @@ Path criaPath(Graph graph, Point pInicial, Point pFinal, DoublyLinkedList nomesV
     ps->duration = duration;
     strcpy(ps->cor, cor);
     ps->idPInt = idPInt;
+    ps->flag = flag;
 
     ps->vertices = create();
 
@@ -52,15 +54,31 @@ void desenhaPathSvg(Path path, void* fileSvg){
     
     //Fazer a tag do caminho
     int primeiro = 1;
-    fprintf((FILE*) fileSvg, "\n\t<path style=\"fill:none;stroke:%s;stroke-width:2px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1\"\n\t d=\" M", ps->cor);
+    if(ps->flag == 0 || ps->flag == 1){
+        fprintf((FILE*) fileSvg, "\n\t<path style=\"fill:none;stroke:%s;stroke-width:2px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1\"\n\t d=\" M", ps->cor);
+    }
+    else{
+        fprintf((FILE*) fileSvg, "\n\t<path stroke-dasharray=\"2\" style=\"fill:none;stroke:%s;stroke-width:2px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1\"\n\t d=\" M", ps->cor);
+    }
     for(Node node = getFirst(ps->vertices); node != NULL; node = getNext(node)){
         Vertice v = getInfo(node);
-        if(primeiro == 1){
-            fprintf((FILE*) fileSvg, " %f %f", verticeGetX(v), verticeGetY(v));
-            primeiro = 0;
+        if(ps->flag == 0 || ps->flag == -1){
+            if(primeiro == 1){
+                fprintf((FILE*) fileSvg, " %f %f", verticeGetX(v), verticeGetY(v));
+                primeiro = 0;
+            }
+            else{
+                fprintf((FILE*) fileSvg, "L %f %f", verticeGetX(v), verticeGetY(v));
+            }
         }
-        else{
-            fprintf((FILE*) fileSvg, "L %f %f", verticeGetX(v), verticeGetY(v));
+        if(ps->flag == 1){
+            if(primeiro == 1){
+                fprintf((FILE*) fileSvg, " %f %f", verticeGetX(v) + 1, verticeGetY(v) + 1);
+                primeiro = 0;
+            }
+            else{
+                fprintf((FILE*) fileSvg, " L %f %f", verticeGetX(v) + 1, verticeGetY(v) + 1);
+            }
         }
     }
     fprintf((FILE*) fileSvg, "\" id=\"%d\" />", ps->idPInt);

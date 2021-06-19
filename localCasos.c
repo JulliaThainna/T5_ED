@@ -7,7 +7,7 @@
 
 typedef struct{
     int n, num;
-    char cep[20], face;
+    char cep[300], face;
     Point point;
 }LocalCasosStruct;
 

@@ -107,7 +107,7 @@ int main(int argc, char *argv[]){
     readGeo(listas, dirGeo, cores);
     Graph graph = NULL;
     //Define QuadTrees
-    QuadTree quadTrees[13];
+    QuadTree quadTrees[14];
     //Instancia quadTrees e suas funções (getId)
     instanciaQts(quadTrees);
     //Converte todas as listas para quadTrees
@@ -151,7 +151,7 @@ int main(int argc, char *argv[]){
         //Concatena o caminho de saida com o nome gerado no comando acima (saida do TXT)
         concatenaCaminhos(dirSaida, nomeArquivoLogTxt, &dirTxt);
         //Lê os comandos do QRY
-        readQry(quadTrees, hashTables, graph, dirQry, dirTxt, dirSaida, nomeGeoSemExtensao, nomeQrySemExtensao);
+        readQry(quadTrees, hashTables, graph, dirQry, dirTxt, dirSaida, nomeGeoSemExtensao, nomeQrySemExtensao, dirSaidaGeoQry);
         //Desenha o svg do QRY
         desenhaSvgQry(quadTrees, dirSaidaGeoQry);
     }

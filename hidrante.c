@@ -6,8 +6,8 @@
 #include "point.h"
 
 typedef struct hidrante{
-    char id[20];
-    char cp[22], cb[22], sw[22];
+    char id[200];
+    char cp[220], cb[220], sw[220];
     Point point;
 }HidranteStruct;
 

@@ -1,6 +1,8 @@
 #ifndef __GRAFO_H
 #define __GRAFO_H
 
+
+#include "quadTree.h"
 #include "doublyLinkedList.h"
 #include "aresta.h"
 #include "vertice.h"
@@ -107,4 +109,18 @@ POS: Uma lista de strings com ids dos vertices do ponto final até o ponto inici
 */
 DoublyLinkedList dijkstraAlgorithm(Graph graph, char* nomeVI, char* nomeVF, float* distTotal, float getPeso(Aresta aresta));
 
+/*
+Retorna 1 se o lado esquerdo for igual ao cep, 0 se o direto for. -1 se nenhum
+*/
+int arestaRetornaLado(Aresta aresta, char* cep);
+
+/*
+Retorna 1 se a aresta estiver na vertical, 0 se a aresta estiver na horizontal e -1 se nenhum dos dois
+*/
+int arestaRetornaSentido(Graph graph, Aresta aresta);
+
+/*
+Remove as arestas especificadas pela chamada, no mesmo sentido
+*/
+void removeArestasBf(QuadTree* qt, Graph graph, char* cep, int flagL, int flagS);
 #endif

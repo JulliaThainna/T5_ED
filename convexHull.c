@@ -49,7 +49,7 @@ DoublyLinkedList convexHull(DoublyLinkedList l, Point (*getPoint)(Info), void (*
     int j = getSize(lAux);
     //Após isso, se o tamanho da lista for menor que três, retorna NULL e encerra o convex hull (Pois os pontos são sómente colineares formando uma reta, sendo impossivel de calcular um poligono)
     if(j < 3){
-        removeList(lAux, 0);
+        //removeList(lAux, 0);
         return NULL;
     }
 
@@ -62,7 +62,7 @@ DoublyLinkedList convexHull(DoublyLinkedList l, Point (*getPoint)(Info), void (*
 
     //Percorre a lista para adicionar no convex hull verificando o sentido anti-horário
     while(i != NULL){
-        while(orientacao(getInfo(getPrevious(getLast(conHull))), getInfo(getLast(conHull)), getPoint(getInfo(i))) != 1){
+        while(getSize(conHull) > 1 && orientacao(getInfo(getPrevious(getLast(conHull))), getInfo(getLast(conHull)), getPoint(getInfo(i))) != 1){
             removeNode(conHull, getLast(conHull), 0);
         }
         insert(conHull, getPoint(getInfo(i)));

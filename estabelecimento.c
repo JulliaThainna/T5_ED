@@ -8,11 +8,11 @@
 
 typedef struct{
     Point ponto;
-    char cnpj[20];
-    char nome[20];
-    char cpf[20];
-    char cep[20];
-    char codt[10];
+    char cnpj[200];
+    char nome[200];
+    char cpf[200];
+    char cep[200];
+    char codt[100];
     char face;
     int numero;
 }EstabelecimentoStruct;

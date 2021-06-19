@@ -7,7 +7,7 @@
 
 typedef void* Path;
 
-Path criaPath(Graph graph, Point pInicial, Point pFinal, DoublyLinkedList nomesVerticesList, float cmp, float duration, char* cor, int idPInt);
+Path criaPath(Graph graph, Point pInicial, Point pFinal, DoublyLinkedList nomesVerticesList, float cmp, float duration, char* cor, int idPInt, int flag);
 
 void desenhaPathSvg(Path path, void* fileSvg);
 
