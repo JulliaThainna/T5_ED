@@ -15,6 +15,8 @@ typedef struct{
     char codt[100];
     char face;
     int numero;
+    float x;
+    float y;
 }EstabelecimentoStruct;
 
 Estabelecimento criaEstabelecimento(Quadra quad, char* cnpj, char* cpf, char* nome, char* codt, char face, int num){
@@ -45,6 +47,8 @@ Estabelecimento criaEstabelecimento(Quadra quad, char* cnpj, char* cpf, char* no
     strcpy(estabelecimento->nome, nome);
     strcpy(estabelecimento->codt, codt);
     estabelecimento->ponto = criaPoint(x,y);
+    estabelecimento->x = x;
+    estabelecimento->y = y;
     estabelecimento->face = face;
     estabelecimento->numero = num;
 
@@ -101,4 +105,20 @@ void estabelecimentoSwap(Estabelecimento e1, Estabelecimento e2){
 
 int estabelecimentoGetSize(){
     return sizeof(EstabelecimentoStruct);
+}
+
+float estabelecimentoGetX(Estabelecimento estabelecimento){
+    EstabelecimentoStruct* e = (EstabelecimentoStruct*) estabelecimento;
+    return e->x;
+}
+
+float estabelecimentoGetY(Estabelecimento estabelecimento){
+    EstabelecimentoStruct* e = (EstabelecimentoStruct*) estabelecimento;
+    return e->y;
+}
+
+
+void estabelecimentoSetPoint(Estabelecimento estabelecimento, float x, float y){
+    EstabelecimentoStruct* e = (EstabelecimentoStruct*) estabelecimento;
+    e->ponto = criaPoint(x,y);
 }

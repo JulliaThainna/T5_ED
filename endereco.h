@@ -18,7 +18,6 @@ Setters: Define o atributo do título da função
 PRE: Objeto e atributo
 */
 void enderecoSetCpf(Endereco endereco, char* cpf);
-void enderecoSetPoint(Endereco endereco, Point p);
 void enderecoSetFace(Endereco endereco, char face);
 void enderecoSetNum(Endereco endereco, int num);
 void enderecoSetComplemento(Endereco endereco, char* compl);
@@ -43,5 +42,9 @@ void enderecoSwap(Endereco e1, Endereco e2);
 
 //Retorna o tamanho do endereço em bytes
 int enderecoGetSize();
+
+float enderecoGetX(Endereco endereco);
+float enderecoGetY(Endereco endereco);
+void enderecoSetPoint(Endereco endereco, float x, float y);
 
 #endif

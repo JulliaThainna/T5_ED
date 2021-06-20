@@ -14,6 +14,8 @@ typedef struct{
     char compl[200];
     char face;
     int numero;
+    float x;
+    float y;
 }EnderecoStruct;
 
 Endereco criaEndereco(Quadra quad, char* cpf, char face, int num, char* compl){
@@ -42,6 +44,8 @@ Endereco criaEndereco(Quadra quad, char* cpf, char face, int num, char* compl){
     strcpy(endereco->cep, quadraGetCep(quad));
     strcpy(endereco->compl, compl);
     endereco->point = criaPoint(x,y);
+    endereco->x = x;
+    endereco->y = y;
     endereco->face = face;
     endereco->numero = num;
     return endereco;
@@ -50,11 +54,6 @@ Endereco criaEndereco(Quadra quad, char* cpf, char face, int num, char* compl){
 void enderecoSetCpf(Endereco endereco, char* cpf) {
     EnderecoStruct* e = (EnderecoStruct*) endereco;
     strcpy(e->cpf, cpf);
-}
-
-void enderecoSetPoint(Endereco endereco, Point p) {
-    EnderecoStruct* e = (EnderecoStruct*) endereco;
-    e->point = p;
 }
 
 void enderecoSetFace(Endereco endereco, char face) {
@@ -114,4 +113,19 @@ void enderecoSwap(Endereco e1, Endereco e2){
 
 int enderecoGetSize(){
     return sizeof(EnderecoStruct);
+}
+
+float enderecoGetX(Endereco endereco){
+    EnderecoStruct* e = (EnderecoStruct*) endereco;
+    return e->x;
+}
+
+float enderecoGetY(Endereco endereco){
+    EnderecoStruct* e = (EnderecoStruct*) endereco;
+    return e->y;
+}
+
+void enderecoSetPoint(Endereco endereco, float x, float y){
+    EnderecoStruct* e = (EnderecoStruct*) endereco;
+    e->point = criaPoint(x,y);
 }
