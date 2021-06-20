@@ -538,15 +538,48 @@ void spInt(Graph graph, QuadTree* qt, Point* registradores, char* sfx, char* r1,
         }
     }
 
-    pInt(qt, graphAux, registradores, sfx, r1, r2, cmc, cmr, pathSpIntSfx, idSpInt, pathSpIntSfxTxt);
+    Point pI = registradores[indiceRegistrador(r1)];
+    Point pF = registradores[indiceRegistrador(r2)];
 
+    if(insidePolygon(convHull, pI) == 0 && insidePolygon(convHull, pF) == 0){
+        pInt(qt, graphAux, registradores, sfx, r1, r2, cmc, cmr, pathSpIntSfx, idSpInt, pathSpIntSfxTxt);
+    }
+    else{
+        FILE* fileSvgGeo = fopen(pathSpIntSfx, "a");
+        if(fileSvgGeo == NULL){
+            return;
+        }
+        printf("\nArquivo SVG-%s aberto com sucesso!", sfx);
+        //Imprime o geo
+        char* corSombra[6] = {"#FFFF00", "#FF9955", "#FF0000", "#FF00CC", "#6600FF", "#A02C5A"}; //Comando usado para fazer a sombras das quadras no SVG do comando dd (Atualizado para T4)
+
+        fprintf(fileSvgGeo, "<svg version=\"1.1\" baseProfile=\"full\" width=\"10000\" height=\"10000\" xmlns=\"http://www.w3.org/2000/svg\"  xmlns:xlink=\"http://www.w3.org/1999/xlink\">");
+        fprintf(fileSvgGeo, "<defs>");
+        for(int i = 0; i < 6; i++){
+            fprintf(fileSvgGeo, "<filter id=\"shadow%d\">\n\t\t\t<feDropShadow dx=\"4\" dy=\"4\" stdDeviation=\"0.2\" flood-color=\"%s\"/>\n\t\t</filter>", i, corSombra[i]);
+        }
+        fprintf(fileSvgGeo, "</defs>");
+
+        percorreLarguraQt(qt[CIRCULO], circuloDesenhaSvgGeo, fileSvgGeo);
+        percorreLarguraQt(qt[RETANGULO], retanguloDesenhaSvgGeo, fileSvgGeo);
+        percorreLarguraQt(qt[TEXTO], textoDesenhaSvgGeo, fileSvgGeo);
+        percorreLarguraQt(qt[QUADRA], quadraDesenhaSvgGeo, fileSvgGeo);
+        percorreLarguraQt(qt[HIDRANTE], hidranteDesenhaSvgGeo, fileSvgGeo);
+        percorreLarguraQt(qt[SEMAFORO], semaforoDesenhaSvgGeo, fileSvgGeo);
+        percorreLarguraQt(qt[RADIOBASE], radioBaseDesenhaSvgGeo, fileSvgGeo);
+        percorreLarguraQt(qt[POSTOSAUDE], postoSaudeDesenhaSvgGeo, fileSvgGeo);
+
+        fclose(fileSvgGeo);
+    }
+    
     FILE* fileConvHull = fopen(pathSpIntSfx, "a");
     if(fileConvHull == NULL){
         return;
     }
-    
+
     Poligono p = criaPoligono(convHull, "FFFF00");
     poligonoDesenhaSvgQry(p, fileConvHull);
+
 
     fclose(fileConvHull);
 }

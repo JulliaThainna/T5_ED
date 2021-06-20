@@ -449,7 +449,7 @@ void removeArestasBf(QuadTree* qt, Graph graph, char* cep, int flagL, int flagS)
             
             if(l == flagL && s == flagS){
 
-                Linha linha = criaLinha(verticeGetX(graphGetVertice(graphGetAdjascentList(graph, arestaGetNomeVerticeInicial(aresta)))), verticeGetY(graphGetVertice(graphGetAdjascentList(graph, arestaGetNomeVerticeInicial(aresta)))), verticeGetX(graphGetVertice(graphGetAdjascentList(graph, arestaGetNomeVerticeFinal(aresta)))) ,verticeGetY(graphGetVertice(graphGetAdjascentList(graph, arestaGetNomeVerticeFinal(aresta)))), 0, 0, "-1");
+                Linha linha = criaLinha(verticeGetX(graphGetVertice(graphGetAdjascentList(graph, arestaGetNomeVerticeInicial(aresta)))), verticeGetY(graphGetVertice(graphGetAdjascentList(graph, arestaGetNomeVerticeInicial(aresta)))), verticeGetX(graphGetVertice(graphGetAdjascentList(graph, arestaGetNomeVerticeFinal(aresta)))) ,verticeGetY(graphGetVertice(graphGetAdjascentList(graph, arestaGetNomeVerticeFinal(aresta)))), 2, 0, "-1");
                 insereQt(qt[LINHA], linhaGetP1(linha), linha);
 
                 Node nodeAux = getNext(nodeA);

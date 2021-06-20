@@ -90,12 +90,11 @@ void soc(QuadTree* qt, Graph graph, int k, char* cep, char face, int num, FILE* 
     for(Node aux = getFirst(lista); aux != NULL; aux = getNext(aux)){
         PostoSaude ps = getInfo(aux);
         if(i < k){
-            /*
-                Linha linha = criaLinha(cx, cy, postoSaudeGetX(getInfo(aux)), postoSaudeGetY(getInfo(aux)), 0, 0, "-1");
-                linhaSetTracejada(linha, 1);
-                insereQt(qt[LINHA], linhaGetP1(linha), linha);
-            */
-
+            
+            Linha linha = criaLinha(cx, cy, postoSaudeGetX(getInfo(aux)), postoSaudeGetY(getInfo(aux)), 0, 0, "-1");
+            linhaSetTracejada(linha, 1);
+            insereQt(qt[LINHA], linhaGetP1(linha), linha);
+        
             //Achar vertice mais próximo do posto de saude
             Point pFinal = criaPoint(postoSaudeGetX(ps), postoSaudeGetY(ps));
             char nomeVF[100];

@@ -1,4 +1,4 @@
-#include <stdio.h>
+  #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
 
@@ -155,6 +155,9 @@ void linhaDesenhaSvgQry(Linha linha, void* fileSvgQry){
     }
     else if(linhaGetPntInicial(linha) == -1){
         fprintf((FILE*)fileSvgQry, "\n\t<line x1=\"%f\" y1=\"%f\" x2=\"%f\" y2=\"%f\" style=\"stroke:red;stroke-width:3\"/>", linhaGetX1(linha), linhaGetY1(linha), linhaGetX2(linha), linhaGetY2(linha));
+    }
+    if(linhaGetPntInicial(linha) == 2){
+        fprintf((FILE*)fileSvgQry, "\n\t<line x1=\"%f\" y1=\"%f\" x2=\"%f\" y2=\"%f\" style=\"stroke:red;stroke-width:6\"/>", linhaGetX1(linha), linhaGetY1(linha), linhaGetX2(linha), linhaGetY2(linha));
     }
    
 }
