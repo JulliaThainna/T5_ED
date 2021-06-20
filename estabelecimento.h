@@ -36,7 +36,13 @@ void estabelecimentoSwap(Estabelecimento e1, Estabelecimento e2);
 //Retorna o tamanho do estabelecimento em bytes
 int estabelecimentoGetSize();
 
+/*
+Retorna o X do estabelecimento (x que não esta dentro do point)
+*/
 float estabelecimentoGetX(Estabelecimento estabelecimento);
+/*
+Retorna o Y do estabelecimento (y que não esta dentro do point)
+*/
 float estabelecimentoGetY(Estabelecimento estabelecimento);
 //Define o ponto de um estabelecimento
 void estabelecimentoSetPoint(Estabelecimento estabelecimento, float x, float y);

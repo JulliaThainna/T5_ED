@@ -117,7 +117,9 @@ otimizar a distância a ser percorrida
 */
 void pbInt(QuadTree* qt, Graph graph, Point* registradores, char* sfx, char* r1, char* r2, char* cmc, char* pathPbIntSfx, int idPbInt, char* pathPbIntSfxTxt);
 
-
+/*
+Função auxiliar para descrever o trajeto no txt
+*/
 void descreveTrajeto(Graph graph, DoublyLinkedList path, FILE* filetxt);
 
 #endif

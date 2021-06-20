@@ -51,7 +51,9 @@ void removeHashTable(HashTable ht);
 */
 int hashFunc(char *key, int tamHT);
 
-
+/*
+    Percorre todos os itens da hashtable executando a função f para todas as infos.
+*/
 void percorreHashTable(HashTable ht, void (*f)(void*, void*), InfoHash extraInf);
 
 #endif

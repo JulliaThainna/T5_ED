@@ -11,5 +11,11 @@
     */
     DoublyLinkedList convexHull(DoublyLinkedList l, Point (*getPoint)(Info), void (*swapInfo)(Info, Info));
 
+    /*
+    Verifica se um point p está dentro de um poligono cujos
+    pontos são descritos na lista l
+    PRE: Lista de pontos e point
+    POS: 0 se estiver fora do poligono e 1 se estiver dentro
+    */
     int insidePolygon(DoublyLinkedList l, Point p);
 #endif

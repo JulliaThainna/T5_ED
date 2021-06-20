@@ -32,7 +32,9 @@ char* pessoaGetSobrenome(Pessoa pessoa);
 char pessoaGetSexo(Pessoa pessoa);
 char* pessoaGetNascimento(Pessoa pessoa);
 
-
+/*
+    Retorna o tamanho em bytes da struct
+*/
 int pessoaGetSize();
 
 #endif

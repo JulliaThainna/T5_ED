@@ -39,6 +39,9 @@ PRE: Objetos p1 e p2
 */
 void localCasosSwap(LocalCasos p1, LocalCasos p2);
 
+/*
+Desenha os localCasos no svg
+*/
 void localCasosDesenhaSvgQry(LocalCasos localCasos, void* fileSvg);
 
 #endif

@@ -43,8 +43,21 @@ void enderecoSwap(Endereco e1, Endereco e2);
 //Retorna o tamanho do endereço em bytes
 int enderecoGetSize();
 
+/*
+Funções auxiliares para o hashfile
+*/
+
+/*
+Retorna o X do endereço (x que não esta dentro do point)
+*/
 float enderecoGetX(Endereco endereco);
+/*
+Retorna o Y do endereço (y que não esta dentro do point)
+*/
 float enderecoGetY(Endereco endereco);
+/*
+Define o point do endereço
+*/
 void enderecoSetPoint(Endereco endereco, float x, float y);
 
 #endif
