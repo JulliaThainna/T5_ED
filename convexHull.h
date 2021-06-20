@@ -11,5 +11,5 @@
     */
     DoublyLinkedList convexHull(DoublyLinkedList l, Point (*getPoint)(Info), void (*swapInfo)(Info, Info));
 
-
+    int insidePolygon(DoublyLinkedList l, Point p);
 #endif

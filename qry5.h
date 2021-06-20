@@ -105,6 +105,8 @@ a envoltória convexa com borda grossa,
 preenchida com amarelo e transparência de
 60%
 */
+void spInt(Graph graph, QuadTree* qt, Point* registradores, char* sfx, char* r1, char* r2, char* cmc, char* cmr, char* pathSpIntSfx, int idSpInt, char* pathSpIntSfxTxt);
+
 
 /*
 Calcula o percurso por ciclo-
@@ -113,7 +115,6 @@ considerar a árvore geradora mínima.
 Como o percurso é por bicicleta, o cálculo deve apenas
 otimizar a distância a ser percorrida
 */
-
 void pbInt(QuadTree* qt, Graph graph, Point* registradores, char* sfx, char* r1, char* r2, char* cmc, char* pathPbIntSfx, int idPbInt, char* pathPbIntSfxTxt);
 
 

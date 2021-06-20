@@ -26,6 +26,9 @@
 #include "postoSaude.h"
 #include "localCasos.h"
 #include "qry5.h"
+#include "convexHull.h"
+#include "vertice.h"
+#include "poligono.h"
 
 enum LISTAS{CIRCULO, RETANGULO, TEXTO, QUADRA, HIDRANTE, SEMAFORO, RADIOBASE, POSTOSAUDE, LINHA, LOCALCASOS, POLIGONO, ESTABELECIMENTO, ENDERECOS};
 enum HASHTABLE{CPF_ENDERECO, TIPO_DESCRICAO, CPF_DADOS, CEP_QUADRA};
@@ -189,7 +192,6 @@ void pInt(QuadTree* qt, Graph graph, Point* registradores, char* sfx, char* r1, 
 
     DoublyLinkedList listCmc = dijkstraAlgorithm(graph, nomeVI, nomeVF, &distTotal, arestaGetCmp);
     DoublyLinkedList listVm = dijkstraAlgorithm(graph, nomeVI, nomeVF, &velocidadeTotal, arestaGetTempo);
-
     
 
     FILE* fileSvgGeo = NULL;
@@ -238,16 +240,22 @@ void pInt(QuadTree* qt, Graph graph, Point* registradores, char* sfx, char* r1, 
         printf("\nAnexado em arquivo SVG anterior com sucesso!");
         
     }
-    
-    Path pathCmc = criaPath(graph, pInicial, pFinal, listCmc, distTotal, 6, cmc, idPInt, 0);
-    Path pathCmr = criaPath(graph, pInicial, pFinal, listVm, velocidadeTotal, 6, cmr, idPInt+1, 1);
-    desenhaPathSvg(pathCmc, fileSvgGeo);
-    desenhaPathSvg(pathCmr, fileSvgGeo);
 
-    fprintf(fileSvgGeoTxt, "\n\np? %s - CMC", sfx);
-    descreveTrajeto(graph, listCmc, fileSvgGeoTxt);
-    fprintf(fileSvgGeoTxt, "\n\np? %s - CMR", sfx);
-    descreveTrajeto(graph, listVm, fileSvgGeoTxt);
+    if(listCmc != NULL){
+        Path pathCmc = criaPath(graph, pInicial, pFinal, listCmc, distTotal, 6, cmc, idPInt, 0);
+        desenhaPathSvg(pathCmc, fileSvgGeo);
+        fprintf(fileSvgGeoTxt, "\n\np? %s - CMC", sfx);
+        descreveTrajeto(graph, listCmc, fileSvgGeoTxt);
+    }
+    if(listVm != NULL){
+        Path pathCmr = criaPath(graph, pInicial, pFinal, listVm, velocidadeTotal, 6, cmr, idPInt+1, 1);
+        desenhaPathSvg(pathCmr, fileSvgGeo);
+        fprintf(fileSvgGeoTxt, "\n\np? %s - CMR", sfx);
+        descreveTrajeto(graph, listVm, fileSvgGeoTxt);
+    }
+    else{
+        fprintf(fileSvgGeoTxt, "\n\np? Não há caminho!");
+    }
 
     fclose(fileSvgGeoTxt);
     fclose(fileSvgGeo);
@@ -332,7 +340,12 @@ void pbInt(QuadTree* qt, Graph graph, Point* registradores, char* sfx, char* r1,
             return;
         }
         printf("\nAnexado em arquivo SVG anterior com sucesso!");
-     }
+    }
+
+    if(listCmc == NULL){
+        fprintf(fileSvgGeoTxt, "\n\npb? Não existe um caminho!");
+        return;
+    }
 
     Path pathCmc = criaPath(graph, pInicial, pFinal, listCmc, distTotal, 6, cmc, idPbInt, 0);
     desenhaPathSvg(pathCmc, fileSvgGeo);
@@ -488,4 +501,52 @@ void descreveTrajeto(Graph graph, DoublyLinkedList path, FILE* filetxt){
     fprintf(filetxt, "\nSiga na Rua %s por %.2f metros e você chegará ao seu destino! :)", arestaGetNome(getInfo(getLast(listaArestas))), arestaGetCmp(getInfo(getLast(listaArestas))));
 }
 
+void spInt(Graph graph, QuadTree* qt, Point* registradores, char* sfx, char* r1, char* r2, char* cmc, char* cmr, char* pathSpIntSfx, int idSpInt, char* pathSpIntSfxTxt){
+    DoublyLinkedList localCasos = create();
+    percorreLarguraQt(qt[LOCALCASOS], insertAuxQry5, localCasos);
+    if(getSize(localCasos) < 2){
+        return;
+    }
 
+    DoublyLinkedList convHull = convexHull(localCasos, localCasosGetPoint, localCasosSwap);
+    if(convHull == NULL){
+        return;
+    }
+
+    //Copia os vertices que estão fora do poligono do convexHull para outro grafo
+    Graph graphAux = createGraph();
+    for(Node node = getFirst(graph); node != NULL; node = getNext(node)){
+        Vertice v = graphGetVertice(getInfo(node));
+        if(insidePolygon(convHull, verticeGetPoint(v)) == 0){
+            Vertice vAux = createVertice(verticeGetNome(v), verticeGetX(v), verticeGetY(v));
+            adicionaVertice(graphAux, vAux);
+        }
+    }
+
+    //Copia as arestas que tem o vertice final e o vertice inicial fora do poligono (graphAux)
+    for(Node node = getFirst(graph); node != NULL; node = getNext(node)){
+        AdjascentList al = getInfo(node);
+        for(Node nodeA = getFirst(graphGetArestas(al)); nodeA != NULL; nodeA = getNext(nodeA)){
+            Aresta a = getInfo(nodeA);
+            AdjascentList alVI = graphGetAdjascentList(graphAux, arestaGetNomeVerticeInicial(a));
+            AdjascentList alVF = graphGetAdjascentList(graphAux, arestaGetNomeVerticeFinal(a));
+            if(alVI != NULL && alVF != NULL){
+                //Aresta createAresta(char* nome, char* nomeVerticeInicial, char* nomeVerticeFinal, char* ldir, char* lesq, float cmp, float vm)
+                Aresta aAux = createAresta(arestaGetNome(a), arestaGetNomeVerticeInicial(a), arestaGetNomeVerticeFinal(a), arestaGetLdir(a), arestaGetLesq(a), arestaGetCmp(a), arestaGetVm(a));
+                adicionaAresta(graphAux, aAux);
+            }
+        }
+    }
+
+    pInt(qt, graphAux, registradores, sfx, r1, r2, cmc, cmr, pathSpIntSfx, idSpInt, pathSpIntSfxTxt);
+
+    FILE* fileConvHull = fopen(pathSpIntSfx, "a");
+    if(fileConvHull == NULL){
+        return;
+    }
+    
+    Poligono p = criaPoligono(convHull, "FFFF00");
+    poligonoDesenhaSvgQry(p, fileConvHull);
+
+    fclose(fileConvHull);
+}

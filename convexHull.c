@@ -72,3 +72,16 @@ DoublyLinkedList convexHull(DoublyLinkedList l, Point (*getPoint)(Info), void (*
     removeList(lAux, 0);
     return conHull;
 }
+
+int insidePolygon(DoublyLinkedList l, Point p){
+    insert(l, getInfo(getFirst(l)));
+    for(Node node = getNext(getFirst(l)); node != NULL; node = getNext(node)){
+        int flag = orientacao(getInfo(getPrevious(node)), getInfo(node), p);
+        if(flag == -1){
+            removeNode(l, getLast(l), 0);
+            return 0;
+        }
+    }
+    removeNode(l, getLast(l), 0);
+    return 1;
+}

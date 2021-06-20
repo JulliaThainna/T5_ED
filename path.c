@@ -73,11 +73,11 @@ void desenhaPathSvg(Path path, void* fileSvg){
         }
         if(ps->flag == 1){
             if(primeiro == 1){
-                fprintf((FILE*) fileSvg, " %f %f", verticeGetX(v) + 1, verticeGetY(v) + 1);
+                fprintf((FILE*) fileSvg, " %f %f", verticeGetX(v) + 2, verticeGetY(v) + 2);
                 primeiro = 0;
             }
             else{
-                fprintf((FILE*) fileSvg, " L %f %f", verticeGetX(v) + 1, verticeGetY(v) + 1);
+                fprintf((FILE*) fileSvg, " L %f %f", verticeGetX(v) + 2, verticeGetY(v) + 2);
             }
         }
     }

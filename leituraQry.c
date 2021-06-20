@@ -74,9 +74,11 @@ void readQry(QuadTree *qt, HashTable *ht, Graph graph, char *dirQry, char *dirTx
     DoublyLinkedList arqsPbInt = create();
     DoublyLinkedList arqsPIntTxt = create();
     DoublyLinkedList arqsPbIntTxt = create();
+    DoublyLinkedList arqsSpInt = create();
+    DoublyLinkedList arqsSpIntTxt = create();
     char j[100], k[100], comando[100], cb[100], cp[100], cep[100], face[100], t, sfx[100], cpf[100], cnpj[100], compl[100], tp[100];
     char reg[100], reg1[100], reg2[100], cmc[100], cmr[100], id[100]; 
-    int casosCovid = 0, n = 0, num = 0, interno = 0, sobrepoe = 0, max = 0, idPInt = 0, idPbInt = 0;
+    int casosCovid = 0, n = 0, num = 0, interno = 0, sobrepoe = 0, max = 0, idPInt = 0, idPbInt = 0, idSpInt = 0;
     float x = 0, y = 0, w = 0, h = 0, r = 0, centroDeMassaX = 0, centroDeMassaY = 0;
 
     Graph graphCiclovia = NULL;
@@ -268,7 +270,7 @@ void readQry(QuadTree *qt, HashTable *ht, Graph graph, char *dirQry, char *dirTx
                 pInt(qt, graph, registradores, sfx, reg1, reg2, cmc, cmr, pathPIntSfx, idPInt, pathPIntSfxTxt);
             }
             else{
-                pInt(qt, graph, registradores, sfx, reg1, reg2, cmc, cmr, getInfo(getLast(arqsPInt)), idPInt, getInfo(getLast(arqsPIntTxt)));
+                pInt(qt, graph, registradores, sfx, reg1, reg2, cmc, cmr, getInfo(getLast(arqsSpInt)), idPInt, getInfo(getLast(arqsSpIntTxt)));
             }
             idPInt += 2;
         }
@@ -278,7 +280,29 @@ void readQry(QuadTree *qt, HashTable *ht, Graph graph, char *dirQry, char *dirTx
         }
         if(strcmp(comando, "sp?") == 0){
             fscanf(fileQry, "%s %s %s %s %s", sfx, reg1, reg2, cmc, cmr);
-            //TODO: sp?
+            if(graph != NULL){
+                if(strcmp(sfx, "-") != 0){
+                    char* pathSpIntSfx = NULL;
+                    char* nomeGeoQry = NULL;
+                    char* nomeGeoQrySfx = NULL;
+                    concatenaNomeGeoQry(nomeGeoSemExtensao, nomeQrySemExtensao, "", &nomeGeoQry);
+                    concatenaNomeGeoQry(nomeGeoQry, sfx, ".svg", &nomeGeoQrySfx);
+                    concatenaCaminhos(dirSaida, nomeGeoQrySfx, &pathSpIntSfx);
+                    char* pathSpIntSfxTxt = NULL;
+                    char* nomeGeoQryTxt = NULL;
+                    char* nomeGeoQrySfxTxt = NULL;
+                    concatenaNomeGeoQry(nomeGeoSemExtensao, nomeQrySemExtensao, "", &nomeGeoQryTxt);
+                    concatenaNomeGeoQry(nomeGeoQryTxt, sfx, ".txt", &nomeGeoQrySfxTxt);
+                    concatenaCaminhos(dirSaida, nomeGeoQrySfxTxt, &pathSpIntSfxTxt);
+                    insert(arqsSpInt, pathSpIntSfx);
+                    insert(arqsSpIntTxt, pathSpIntSfxTxt);
+                    spInt(graph, qt, registradores, sfx, reg1, reg2, cmc, cmr, pathSpIntSfx, idSpInt, pathSpIntSfxTxt);
+                }
+                else{
+                    spInt(graph, qt, registradores, sfx, reg1, reg2, cmc, cmr, getInfo(getLast(arqsSpInt)), idSpInt, getInfo(getLast(arqsSpIntTxt)));
+                }
+                idSpInt += 2;
+            }
         }
         if(strcmp(comando, "pb?") == 0){
             fscanf(fileQry, "%s %s %s %s", sfx, reg1, reg2, cmc);
@@ -296,7 +320,7 @@ void readQry(QuadTree *qt, HashTable *ht, Graph graph, char *dirQry, char *dirTx
                     concatenaNomeGeoQry(nomeGeoSemExtensao, nomeQrySemExtensao, "", &nomeGeoQryTxt);
                     concatenaNomeGeoQry(nomeGeoQryTxt, sfx, ".txt", &nomeGeoQrySfxTxt);
                     concatenaCaminhos(dirSaida, nomeGeoQrySfxTxt, &pathPbIntSfxTxt);
-                    insert(arqsPbIntTxt, pathPbIntSfxTxt);
+                    insert(arqsPbInt, pathPbIntSfx);
                     insert(arqsPbIntTxt, pathPbIntSfxTxt);
                     pbInt(qt, graphCiclovia, registradores, sfx, reg1, reg2, cmc, pathPbIntSfx, idPbInt, pathPbIntSfxTxt);
                 }
@@ -328,8 +352,23 @@ void readQry(QuadTree *qt, HashTable *ht, Graph graph, char *dirQry, char *dirTx
         fclose(fileArqsPbInt);
     }
 
+    FILE* fileArqsSpInt = NULL;
+    for(Node node = getFirst(arqsSpInt); node != NULL; node = getNext(node)){
+        fileArqsSpInt = fopen(getInfo(node), "a");
+        if(fileArqsSpInt == NULL){
+            continue;
+        }
+        fprintf(fileArqsSpInt, "\n</svg>");
+        fclose(fileArqsSpInt);
+    }
+
     removeList(arqsPInt, 1);
     removeList(arqsPbInt, 1);
+    removeList(arqsPIntTxt, 1);
+    removeList(arqsPbIntTxt, 1);
+    removeList(arqsSpInt, 1);
+    removeList(arqsSpIntTxt, 1);
+
     fclose(fileTxt);
     fclose(fileQry);
     fclose(fileSvgQry);
@@ -339,3 +378,4 @@ char faceToChar(char* face){
     int tam = strlen(face);
     return toupper(face[tam-1]);
 }
+
