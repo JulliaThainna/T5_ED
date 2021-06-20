@@ -25,9 +25,11 @@ POS: retorna o atributo
 */
 Vertice graphGetVertice(AdjascentList adjascentList);
 
-/*
 
-*/
+/*Essa função retorna as Arestas de uma lista de adjascencia.
+Cada lista de adjascencia possui um vertice e uma lista de arestas que saem desse vertice
+PRE: uma lista de adjascencia;
+POS: retorna o atributo*/
 DoublyLinkedList graphGetArestas(AdjascentList adjascentList);
 
 /*
