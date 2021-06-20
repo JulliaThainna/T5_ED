@@ -117,7 +117,6 @@ void soc(QuadTree* qt, Graph graph, int k, char* cep, char face, int num, FILE* 
             Path pathCmp = criaPath(graph, pInicial, pFinal, listCmp, cmpTotal, 6, "blue", id+i, -1);
             
             //Imprimir path
-            printf("aqui");
             desenhaPathSvg(pathCmp, fileSvgQry);
             i++;
         }

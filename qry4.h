@@ -1,6 +1,7 @@
 #ifndef __QRY4_H
 #define __QRY4_H
 
+#include "graph.h"
 #include "quadTree.h"
 #include "hashTable.h"
 
@@ -90,6 +91,6 @@ Desenhar sob o mapa o referido circulo com cor
 de preenchimento #CCFF00, cor de borda
 #6C6753 e com 50% de transparência.
 */
-void catac(QuadTree* qt, HashTable* ht, float x, float y, float r, FILE* fileTxt);
+void catac(QuadTree* qt, HashTable* ht, float x, float y, float r, FILE* fileTxt, Graph graph);
 
 #endif

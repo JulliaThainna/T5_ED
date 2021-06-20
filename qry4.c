@@ -15,7 +15,9 @@
 #include "semaforo.h"
 #include "radioBase.h"
 #include "utilitario.h"
-
+#include "graph.h"
+#include "aresta.h"
+#include "vertice.h"
 /*
 CHAVE X VALOR
 HASHTABLE 0 cpf X endereço:                                                 
@@ -218,7 +220,7 @@ void eplg(QuadTree* qt, HashTable* ht, char* tp, float x, float y, float w, floa
     removeList(listaNoEstabelecimento, 0);
 }
 
-void catac(QuadTree* qt, HashTable* ht, float x, float y, float r, FILE* fileTxt){
+void catac(QuadTree* qt, HashTable* ht, float x, float y, float r, FILE* fileTxt, Graph graph){
     fprintf(fileTxt, "\ncatac %f %f %f\n", x, y, r);
 
     DoublyLinkedList quadras = nosDentroCirculoQt(qt[QUADRA], x, y, r);
@@ -291,7 +293,43 @@ void catac(QuadTree* qt, HashTable* ht, float x, float y, float r, FILE* fileTxt
         free(e);
     }
 
-    //ID -2 para ser transparente
+    //Id -2 para ser transparente
     Circulo circulo = criaCirculo("-2", x, y, r, "#6C6753", "#CCFF00,", "2px");
     insereQt(qt[CIRCULO], circuloGetPoint(circulo), circulo);
+
+    if(graph == NULL){
+        return;
+    }
+
+    //Remove vertices que estão dentro do circulo
+    Node node = getFirst(graph);
+    while(node != NULL){
+        Vertice v = graphGetVertice(getInfo(node));
+        if(insideCirculo(verticeGetX(v), verticeGetY(v), x, y, r) == 1){
+            Node nodeAux = getNext(node);
+            fprintf(fileTxt, "VERTICE | ID: %s X: %f Y: %f\n", verticeGetNome(v), verticeGetX(v), verticeGetY(v));
+            removeNode(graph, node, 0);
+            node = nodeAux;
+            continue;
+        }
+        node = getNext(node);
+    }
+
+    for(Node node = getFirst(graph); node != NULL; node = getNext(node)){
+        AdjascentList al = getInfo(node);
+        Node nodeA = getFirst(graphGetArestas(al)); 
+        while(nodeA != NULL){
+            Aresta a = getInfo(nodeA);
+            AdjascentList alVI = graphGetAdjascentList(graph, arestaGetNomeVerticeInicial(a));
+            AdjascentList alVF = graphGetAdjascentList(graph, arestaGetNomeVerticeFinal(a));
+            if(alVI == NULL || alVF == NULL){
+                Node nodeAux = getNext(nodeA);
+                fprintf(fileTxt, "ARESTA | NOME: %s NOME VERTICE INICIAL: %s NOME VERTICE FINAL: %s LESQ: %s LDIR: %s CMP: %f VM: %f\n", arestaGetNome(a), arestaGetNomeVerticeInicial(a), arestaGetNomeVerticeFinal(a), arestaGetLesq(a), arestaGetLdir(a), arestaGetCmp(a), arestaGetVm(a));
+                removeNode(graphGetArestas(al), nodeA, 0);
+                nodeA = nodeAux;
+                continue;
+            }
+            nodeA = getNext(nodeA);
+        }
+    }
 }

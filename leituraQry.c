@@ -225,7 +225,7 @@ void readQry(QuadTree *qt, HashTable *ht, Graph graph, char *dirQry, char *dirTx
         //catac
         if(strcmp(comando, "catac") == 0){
             fscanf(fileQry, "%f %f %f", &x, &y, &r);
-            catac(qt, ht, x, y, r, fileTxt);
+            catac(qt, ht, x, y, r, fileTxt, graph);
         }
 
         //T5_ED
